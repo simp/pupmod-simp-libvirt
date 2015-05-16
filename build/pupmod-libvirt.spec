@@ -1,0 +1,191 @@
+Summary: Libvirt Puppet Module
+Name: pupmod-libvirt
+Version: 4.1.0
+Release: 15
+License: Apache License, Version 2.0
+Group: Applications/System
+Source: %{name}-%{version}-%{release}.tar.gz
+Buildroot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
+Requires: pupmod-iptables >= 4.1.0-3
+Requires: pupmod-common >= 4.1.0-4
+Requires: pupmod-functions >= 2.1.0
+Requires: pupmod-sysctl >= 4.1.0-2
+Requires: puppet >= 3.3.0
+Buildarch: noarch
+Requires: simp-bootstrap >= 4.2.0
+Obsoletes: pupmod-libvirt-test
+
+Prefix:"/etc/puppet/environments/simp/modules"
+
+%description
+This module allows you to install libvirt on a Red Hat system.  It currently has
+a subclass for KVM.
+
+Xen is not currently planned for support since Red Hat is moving to KVM.
+
+%prep
+%setup -q
+
+%build
+
+%install
+[ "%{buildroot}" != "/" ] && rm -rf %{buildroot}
+
+mkdir -p %{buildroot}/%{prefix}/libvirt
+
+dirs='files lib manifests templates'
+for dir in $dirs; do
+  test -d $dir && cp -r $dir %{buildroot}/%{prefix}/libvirt
+done
+
+mkdir -p %{buildroot}/usr/share/simp/tests/modules/libvirt
+
+%clean
+[ "%{buildroot}" != "/" ] && rm -rf %{buildroot}
+
+mkdir -p %{buildroot}/%{prefix}/libvirt
+
+%files
+%defattr(0640,root,puppet,0750)
+/etc/puppet/environments/simp/modules/libvirt
+
+%post
+#!/bin/sh
+
+if [ -d /etc/puppet/environments/simp/modules/libvirt/plugins ]; then
+  /bin/mv /etc/puppet/environments/simp/modules/libvirt/plugins /etc/puppet/environments/simp/modules/libvirt/plugins.bak
+fi
+
+%postun
+# Post uninstall stuff
+
+%changelog
+* Fri Jan 16 2015 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.1.0-15
+- Changed puppet-server requirement to puppet
+
+* Wed Aug 27 2014 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.1.0-14
+- Updated to use the new sysctl::value define.
+
+* Tue Aug 26 2014 Kendall Moore <kmoore@keywcorp.com> - 4.1.0-14
+- Updated package names and spec tests for RHEL6 and RHEL7 compatibility.
+
+* Mon Aug 25 2014 Kendall Moore <kmoore@keywcorp.com> - 4.1.0-13
+- Moved shmall fact to common.
+
+* Mon Jul 21 2014 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.1.0-11
+- Updated to use /var/VM for SIMP>=5
+
+* Mon May 05 2014 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.1.0-11
+- The ksm service should only start at boot time and not be restarted over time.
+
+* Sun Mar 02 2014 Kendall Moore <kmoore@keywcorp.com> - 4.1.0-10
+- Refactored code to pass all lint tests and for puppet 3 and hiera compatibility.
+- Added basic spec tests for test coverage.
+
+* Wed Feb 12 2014 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.1.0-9
+- Converted all boolean strings to full booleans.
+- Added validation statements for vm_create.
+- Changed variables that defaulted to empty string but took hashes or
+  arrays to an empty hash or array.
+
+* Mon Oct 07 2013 Kendall Moore <kmoore@keywcorp.com> - 4.1.0-8
+- Updated all erb templates to properly scope variables.
+
+* Thu Jul 18 2013 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.1.0-7
+- Added the package 'libsndfile' to the install list for the
+  'libvirt::kvm' class. Apparently, the absence of this file was
+  causing issues on some systems.
+
+* Thu Jul 04 2013 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.1.0-6
+- Added support for pointing to ISO images using the location_url setting. This
+  doesn't strictly map to the virt-install settings but, honestly, it should
+  work this way.
+
+* Tue May 14 2013 Trevor Vaughan <tvaughan@onyxpoint.com> 4.1.0-5
+- Ensure that the vm_create exec requires the libvirtd service.
+  Without this, what is expected is not what you get.
+
+* Thu Jan 31 2013 Trevor Vaughan <tvaughan@onyxpoint.com> 4.1.0-4
+- Created a Cucumber test which sets up and installs libvirt and checks to ensure
+  that the system runlevel changes and the all sysctl settings are altered properly.
+
+* Fri Jan 18 2013 Trevor Vaughan <tvaughan@onyxpoint.com> 4.1.0-3
+- Fixed some ordering bugs in the kvm code as well as a small typo in the kvm
+  kernel module loading file which was causing the kernel modules to not be
+  loaded until forced by hand or rebooted.
+
+* Thu Dec 13 2012 Trevor Vaughan <tvaughan@onyxpoint.com> 4.1.0-2
+- Updated to require pupmod-common >= 2.1.1-2 so that upgrading an old
+  system works properly.
+
+* Wed Nov 14 2012 Trevor Vaughan <tvaughan@onyxpoint.com> 4.1.0-1
+- Added an updated that fixes a bug when using the disk_bus option in
+  vm_create. This was a typo that made upgrades on legacy systems malfunction
+  if using the old disk_bus option instead of the disk_opts hash.
+
+* Sun Jul 08 2012 Trevor Vaughan <tvaughan@onyxpoint.com> 4.1.0-0
+- Added the internal setting of IPv4 forwarding at the kernel level.
+- Added almost all options to the vm creation define including multiple NIC
+  support and support for SPICE.
+- This makes extensive use of hashes.
+- The only item that has been removed is the 'keymap' option which was rarely
+  used by users but could cause compatibility issues.
+
+* Tue May 29 2012 Trevor Vaughan <tvaughan@onyxpoint.com> 4.0.0-4
+- Ensure that the sysctl call for the IPv6 segment is only called on systems
+  with IPv6 enabled.
+- Moved mit-tests to /usr/share/simp...
+- Updated pp files to better meet Puppet's recommended style guide.
+
+* Fri Mar 02 2012 Trevor Vaughan <tvaughan@onyxpoint.com> 4.0.0-3
+- Improved test stubs.
+
+* Mon Dec 26 2011 Trevor Vaughan <tvaughan@onyxpoint.com> 4.0-2
+- Updated the spec file to not require a separate file list.
+
+* Fri Nov 18 2011 Trevor Vaughan <tvaughan@onyxpoint.com> 4.0-1
+- Added a wrapper around the target file declaration so that it does not get
+  double declared. This is not really best practice but there's not a better way
+  to do it at this point.
+
+* Fri Nov 04 2011 Trevor Vaughan <tvaughan@onyxpoint.com> 4.0-0
+- Ensure that the 'kvm' group owns the $target directory when creating new VMs.
+  This is required for the new libvirt security model.
+- Added ksm support to the libvirt module.
+- Updated to add a keymap option to work around a bug in RHEL6.
+- Split out the RHEL6 package names from the RHEL5 package names.
+
+* Tue Oct 11 2011 Trevor Vaughan <tvaughan@onyxpoint.com> 3.0-1
+- The newvm script now checks for files to be present in the target directory
+  prior to skipping the install.
+
+* Mon Jul 11 2011 Trevor Vaughan <tvaughan@onyxpoint.com> 3.0-0
+- Set default VM type to rhel6.
+
+* Mon Apr 18 2011 Trevor Vaughan <tvaughan@onyxpoint.com> 1.0-3
+- Changed puppet://$puppet_server to puppet:///
+
+* Mon Dec 20 2010 Trevor Vaughan <tvaughan@onyxpoint.com> 1.0-2
+- Newvm script now successfully starts VM at completion.
+
+* Tue Oct 26 2010 Trevor Vaughan <tvaughan@onyxpoint.com> 1.0-1
+- Converting all spec files to check for directories prior to copy.
+
+* Thu May 27 2010 Trevor Vaughan <tvaughan@onyxpoint.com> 1.0-0
+- Fixed broken vm_create.
+- Refactored code and updated documentation.
+
+* Thu May 13 2010 Trevor Vaughan <tvaughan@onyxpoint.com> 0.1-3
+- Allow for the specification of the disk bus using the disk_bus variable.
+
+* Tue Apr 27 2010 Trevor Vaughan <tvaughan@onyxpoint.com> 0.1-2
+- Now allow for the specification of a target directory for VMs to be installed
+  into.
+
+* Tue Nov 24 2009 Trevor Vaughan <tvaughan@onyxpoint.com> 0.1-1
+- Set the sysctl values appropriately to bypass iptables forwarding for speed.
+- Removed the unnecessary /srv/VM/$name/$name value from newvm.erb
+
+* Tue Nov 10 2009 Trevor Vaughan <tvaughan@onyxpoint.com> 0.1-0
+- Initial offering.
+

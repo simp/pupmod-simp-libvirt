@@ -1,0 +1,7 @@
+---
+fixtures:
+  symlinks:
+    libvirt: "#{source_dir}"
+    common: "#{source_dir}/../common"
+    stdlib: "#{source_dir}/../stdlib"
+    sysctl: "#{source_dir}/../sysctl"

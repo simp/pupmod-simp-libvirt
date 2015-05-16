@@ -1,0 +1,245 @@
+#!/bin/sh
+
+<%
+t_vinst_command = "/usr/bin/virt-install"
+t_vinst_command += " -n \"#{name}\""
+t_vinst_command += " -r #{mem}"
+t_vinst_command += " --noautoconsole"
+t_vinst_command += " --os-variant=#{osvariant}"
+t_vinst_command += " --os-type=#{ostype}"
+
+if not @networks.empty? then
+  used_mac_addr = false
+  Array(@networks).each do |t_network|
+    if not ['bridge','network'].include?(t_network['type'].to_s) then
+      raise Puppet::ParseError.new(
+        "Error: Network 'type' must be one of 'bridge, network'"
+      )
+    end
+    if not t_network['target'] then
+      raise Puppet::ParseError.new(
+        "Error: You must specify a network interface in $networks"
+      )
+    end
+
+    t_vinst_command += " -w #{t_network['type']}:#{t_network['target']}"
+    t_network['model'] and t_vinst_command += ",model=#{t_network['model']}"
+
+    if t_network['mac'] then
+      t_vinst_command += ",mac=#{t_network['mac']}"
+    elsif !@mac_addr.empty? and !used_mac_addr then
+      t_vinst_command += ",mac=#{@mac_addr}"
+      used_mac_addr = true
+    end
+  end
+# This is here for legacy purposes and should be removed at some point.
+# ##LEGACY##
+else
+  if !@mac_addr.empty? then
+    t_vinst_command += " -m #{@mac_addr}"
+  end
+
+  if has_variable?('bridge') and !@bridge.empty? then
+    t_vinst_command += " -w bridge:#{@bridge}"
+  end
+end
+
+t_vinst_command += " --vcpus=#{@vcpus}"
+
+t_valid_vcpu_options = ['maxvcpus','sockets','cores','threads']
+
+# Validate that all of the vcpu options passed are valid.
+if !@vcpu_options.empty? and !(@vcpu_options.keys - t_valid_vcpu_options).empty? then
+  raise Puppet::ParseError.new(
+    "Error: vcpu_options was passed an invalid option. Valid options include '#{t_valid_vcpu_options.join(', ')}'"
+  )
+end
+
+if not @vcpu_options.empty? then
+  t_valid_vcpu_options.each do |t_valid_vcpu_option|
+  @vcpu_options[t_valid_vcpu_option] and t_vinst_command += ",#{t_valid_vcpu_option}=#{@vcpu_options[t_valid_vcpu_option]}"
+  end
+end
+
+# Graphics settings
+t_vinst_command += " --graphics #{@graphics['type']}"
+
+if @graphics['type'] == 'vnc' then
+  @graphics['keymap'] and t_vinst_command += ",keymap=#{@graphics['keymap']}"
+end
+
+if @graphics['type'] == 'spice' then
+  @graphics['tlsport'] and t_vinst_command += ",tlsport=#{@graphics['tlsport']}"
+end
+
+if @graphics['type'] == 'vnc' or @graphics['type'] == 'spice' then
+  @graphics['port'] and t_vinst_command += ",port=#{@graphics['port']}"
+  @graphics['listen'] and t_vinst_command += ",listen=#{@graphics['listen']}"
+  @graphics['password'] and t_vinst_command += ",password=#{@graphics['password']}"
+  @graphics['passwordvalidto'] and t_vinsta_command += ",passwordvalidto=#{@graphics['passwordvalidto']}"
+end
+      
+if !@arch.empty? then
+    t_vinst_command += " --arch=#{@arch}"
+end
+
+if !@machine.empty? then
+    t_vinst_command += " --machine=#{@machine}"
+end
+
+if not @numatune.empty? then
+  if not @numatune['nodeset'] then
+    raise Puppet::ParseError.new(
+      "Error: 'nodeset' must be declared in the 'numatune' hash"
+    )
+  end
+  t_vinst_command += " --numatune=#{@numatune['nodeset']}"
+  @numatune['mode'] and t_vinst_command += ",mode=#{@numatune['mode']}"
+end
+
+if not @cpu.empty? then
+  if not @cpu['name'] then
+    raise Puppet::ParseError.new(
+      "Error: 'name' must be declared in the 'cpu' hash"
+    )
+  end
+
+  t_vinst_command += " --cpu #{@cpu['name']}"
+  @cpu['features'] and t_vinst_command += ",#{@cpu['features'].join(',')}"
+  @cpu['match'] and t_vinst_command += ",match=#{@cpu['match']}"
+  @cpu['vendor'] and t_vinst_command += ",vendor=#{@cpu['vendor']}"
+  
+end
+
+if !@description.empty? then
+    t_vinst_command += " --description='#{@description}'"
+end
+
+t_sec_type = ['static','dynamic']
+if not @security.empty? then
+  if not t_sec_type.include?(@security['type']) then
+    raise Puppet::ParseError.new(
+      "Error: 'security' => 'type' must be one of '#{t_sec_type.join(", ")}'"
+    )
+  end
+
+  t_vinst_command += " --security type=#{@security['type']}"
+  @security['label'] and t_vinst_command += ",label=#{@security['label']}"
+end
+
+if !@cpuset.empty? then
+    t_vinst_command += " --cpuset=#{@cpuset}"
+end
+
+if !@sparse then
+    t_vinst_command += " --disk=path='#{@target_dir}/#{@name}/Disk1',size=#{@size},sparse='false'"
+else
+    t_vinst_command += " --disk=path='#{@target_dir}/#{@name}/Disk1',size=#{@size},sparse='true'"
+end
+
+t_disk_opts = ['bus','perms','cache','format','io','error_policy','serial']
+# Yes, I know this messes around with the permanent state of the object, but it
+# doesn't matter.
+if not @disk_bus.empty? and not @disk_opts['bus'] then
+  @disk_opts['bus'] = @disk_bus
+end
+
+if not @disk_opts.empty? then
+  t_disk_opts.each do |t_disk_opt|
+    if @disk_opts[t_disk_opt] then
+      t_vinst_command += ",#{t_disk_opt}=#{@disk_opts[t_disk_opt]}"
+    end
+  end
+end
+
+if @full_virt then
+    t_vinst_command += " -v"
+else
+    t_vinst_command += " -p"
+end
+
+if @accelerate.to_s.eql?('true') then
+    t_vinst_command += " --accelerate"
+end
+
+if @sound.to_s.eql?('true') then
+    t_vinst_command += " --sound"
+end
+
+if @noapic.to_s.eql?('true') then
+    t_vinst_command += " --noapic"
+end
+
+if @noacpi.to_s.eql?('true') then
+    t_vinst_command += " --noacpi"
+end
+
+if !@virt_type.empty? then
+    t_vinst_command += " --virt-type #{virt_type}"
+end
+
+if !@host_device.empty? then
+    t_vinst_command += " --host-device #{host_device}"
+end
+
+if not @watchdog.empty? then
+    t_vinst_command += " --watchdog #{@watchdog['model']}"
+    @watchdog['action'] and t_vinst_command += ",action=#{@watchdog['action']}"
+end
+
+if @pxe.to_s.eql?('true') then
+    t_vinst_command += " --pxe"
+else
+    if @location_url.empty? then
+        raise SyntaxError, 'Error: $location_url cannot be empty if you are not using pxe'
+    end
+
+    if @location_url.split('.').last =~ /iso/i then
+      t_vinst_command += " -c #{@location_url}"
+    else
+      t_vinst_command += " -l #{@location_url}"
+    end
+
+    if !@ks_url.empty? then
+        t_vinst_command += " -x ks=#{@ks_url}"
+    end
+end
+-%>
+
+still_running () { ps -f -C qemu-kvm | grep '<%= @name %>' | grep 'no-reboot' >& /dev/null; return $?; }
+
+ignore='false'
+if [ "$1" == '-i' ]; then
+  ignore='true'
+fi
+
+if [ "$ignore" == 'true' ] || [ `ls "<%= @target_dir %>/<%= @name %>" 2>/dev/null | wc -l` -eq 0 ]; then
+  mkdir -p -m 750 "<%= @target_dir %>/<%= @name %>";
+else
+  echo "VM <%= @name %> already exists, not creating";
+  exit 0;
+fi
+
+<%= t_vinst_command %>
+
+/usr/bin/virsh autostart <%= @name %>;
+
+echo -n "Installing <%= @name %>: "
+
+while still_running; do
+  echo -n '>';
+  sleep 5;
+done
+
+echo 
+
+sleep 5;
+
+echo "Starting <%= @name %>";
+
+/usr/bin/virsh start <%= @name %>;
+
+# Fire off a KSM run if it exists.
+if [ -d /sys/kernel/mm/ksm ]; then
+  echo '1' > /sys/kernel/mm/ksm/run
+fi
