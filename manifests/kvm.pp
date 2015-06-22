@@ -61,7 +61,7 @@ class libvirt::kvm {
   sysctl::value { 'net.bridge.bridge-nf-call-iptables':  value => '0' }
 
   # TODO: Make native boolean when we use facter 2.0
-  if $::ipv6_enabled == 'true' {
+  if $::ipv6_enabled == true {
     sysctl::value { 'net.bridge.bridge-nf-call-ip6tables': value => '0' }
   }
   else {

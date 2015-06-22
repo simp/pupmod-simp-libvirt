@@ -88,10 +88,10 @@ class libvirt::ksm (
   }
 
   service { 'ksm':
-    enable      => true,
-    hasstatus   => true,
-    hasrestart  => true,
-    require     => Package['qemu-kvm']
+    enable     => true,
+    hasstatus  => true,
+    hasrestart => true,
+    require    => Package['qemu-kvm']
   }
 
   service { 'ksmtuned':
