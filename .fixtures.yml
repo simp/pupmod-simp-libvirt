@@ -4,6 +4,7 @@ fixtures:
     augeasproviders_sysctl: "git://github.com/simp/augeasproviders_sysctl"
     augeasproviders_core: "git://github.com/simp/augeasproviders_core"
     common: "git://github.com/simp/pupmod-simp-common"
+    simplib: 'git://github.com/simp/pupmod-simp-simplib'
     stdlib: "git://github.com/simp/puppetlabs-stdlib"
     sysctl: "git://github.com/simp/pupmod-simp-sysctl"
   symlinks:
