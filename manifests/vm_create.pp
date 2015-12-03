@@ -202,7 +202,7 @@ define libvirt::vm_create (
   }
 
   if $::operatingsystem in ['RedHat','CentOS'] {
-    $exec_deps = $::lsbmajdistrelease ? {
+    $exec_deps = $::operatingsystemmajrelease ? {
       '7' => [
         File["/usr/local/sbin/vm-create-${name}.sh"],
         Package['virt-install'],
@@ -216,7 +216,7 @@ define libvirt::vm_create (
     }
   }
   else {
-    warning("$::operatingsystem not yet supported. Current options are RedHat and CentOS.")
+    warning("${::operatingsystem} not yet supported. Current options are RedHat and CentOS.")
   }
 
   exec { "vm-create-${name}":

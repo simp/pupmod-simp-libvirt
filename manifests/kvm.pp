@@ -24,7 +24,7 @@ class libvirt::kvm {
   }
 
   if $::operatingsystem in ['RedHat', 'CentOS'] {
-    $package_list = $::lsbmajdistrelease ? {
+    $package_list = $::operatingsystemmajrelease ? {
       '7' => [
         'ipxe-roms',
         'ipxe-roms-qemu',
@@ -45,7 +45,7 @@ class libvirt::kvm {
     }
   }
   else {
-    warning("$::operatingsystem not yet supported. Current options are RedHat and CentOS")
+    warning("${::operatingsystem} not yet supported. Current options are RedHat and CentOS")
   }
   package { $package_list:
     ensure => 'latest',

@@ -10,13 +10,13 @@
 class libvirt {
 
   if $::operatingsystem in ['RedHat', 'CentOS'] {
-    $package_list = $::lsbmajdistrelease ? {
+    $package_list = $::operatingsystemmajrelease ? {
       '7'     => ['libvirt', 'virt-viewer', 'virt-install'],
       default => ['libvirt', 'virt-viewer', 'python-virtinst']
     }
   }
   else {
-    warning("$::operatingsystem not yet supported. Current supported options are RedHat and CentOS.")
+    warning("${::operatingsystem} not yet supported. Current supported options are RedHat and CentOS.")
   }
 
   package { $package_list: ensure => 'latest' }
