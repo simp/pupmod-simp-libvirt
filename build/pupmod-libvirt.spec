@@ -7,9 +7,7 @@ Group: Applications/System
 Source: %{name}-%{version}-%{release}.tar.gz
 Buildroot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Requires: pupmod-iptables >= 4.1.0-3
-Requires: pupmod-common >= 4.1.0-4
 Requires: pupmod-simplib >= 1.0.0-0
-Requires: pupmod-functions >= 2.1.0
 Requires: pupmod-sysctl >= 4.1.0-2
 Requires: puppet >= 3.3.0
 Buildarch: noarch

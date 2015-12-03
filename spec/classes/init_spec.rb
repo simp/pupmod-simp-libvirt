@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'libvirt' do
 
   let(:facts) {{
-    :lsbmajdistrelease => '6',
+    :operatingsystemmajrelease => '6',
     :operatingsystem   => 'CentOS'
   }}
 

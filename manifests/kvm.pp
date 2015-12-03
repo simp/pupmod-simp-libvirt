@@ -24,7 +24,7 @@ class libvirt::kvm {
   }
 
   if $::operatingsystem in ['RedHat', 'CentOS'] {
-    $package_list = $::lsbmajdistrelease ? {
+    $package_list = $::operatingsystemmajrelease ? {
       '7' => [
         'ipxe-roms',
         'ipxe-roms-qemu',

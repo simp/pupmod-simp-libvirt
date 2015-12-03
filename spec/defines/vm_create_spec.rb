@@ -4,7 +4,7 @@ describe 'libvirt::vm_create' do
 
   let(:title) {'foo_vm'}
   let(:facts) {{
-    :lsbmajdistrelease => '6',
+    :operatingsystemmajrelease => '6',
     :operatingsystem   => 'CentOS'
   }}
   let(:params) {{

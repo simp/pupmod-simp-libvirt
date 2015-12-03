@@ -10,7 +10,7 @@
 class libvirt {
 
   if $::operatingsystem in ['RedHat', 'CentOS'] {
-    $package_list = $::lsbmajdistrelease ? {
+    $package_list = $::operatingsystemmajrelease ? {
       '7'     => ['libvirt', 'virt-viewer', 'virt-install'],
       default => ['libvirt', 'virt-viewer', 'python-virtinst']
     }
