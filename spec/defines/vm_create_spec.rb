@@ -13,6 +13,6 @@ describe 'libvirt::vm_create' do
     :target_dir => '/tmp/test_libvirt'
   }}
 
-  it { should create_file('/tmp/test_libvirt').with_ensure('directory') }
-  it { should create_file('/usr/local/sbin/vm-create-foo_vm.sh').with_content(/size=50/) }
+  it { is_expected.to create_file('/tmp/test_libvirt').with_ensure('directory') }
+  it { is_expected.to create_file('/usr/local/sbin/vm-create-foo_vm.sh').with_content(/size=50/) }
 end

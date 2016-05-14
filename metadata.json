@@ -1,13 +1,18 @@
 {
-  "name":    "simp-libvirt",
-  "version": "3.0.1",
-  "author":  "simp",
+  "name": "simp-libvirt",
+  "version": "4.1.1",
+  "author": "simp",
   "summary": "manages Kibana 3 in a SIMP-compatible environment",
   "license": "Apache-2.0",
-  "source":  "https://github.com/simp/pupmod-simp-libvirt",
+  "source": "https://github.com/simp/pupmod-simp-libvirt",
   "project_page": "https://github.com/simp/pupmod-simp-libvirt",
-  "issues_url":   "https://simp-project.atlassian.net",
-  "tags": [ "simp", "libvirt", "kvm", "virsh" ],
+  "issues_url": "https://simp-project.atlassian.net",
+  "tags": [
+    "simp",
+    "libvirt",
+    "kvm",
+    "virsh"
+  ],
   "dependencies": [
     {
       "name": "simp-apache",

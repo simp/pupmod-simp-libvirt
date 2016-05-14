@@ -1,6 +1,8 @@
 require 'pathname'
 require 'rspec-puppet'
 require 'puppetlabs_spec_helper/module_spec_helper'
+require 'simp/rspec-puppet-facts'
+include Simp::RspecPuppetFacts
 
 # RSpec Material
 
@@ -21,14 +23,12 @@ end
 default_hiera_config =<<-EOM
 ---
 :backends:
-  - "rspec"
   - "yaml"
 :yaml:
   :datadir: "stub"
 :hierarchy:
   # This is a variable that you can set in your test classes to ensure that the
   # targeted YAML file gets loaded in the fixtures.
-  - "%{spec_title}"
   - "%{module_name}"
   - "default"
 EOM

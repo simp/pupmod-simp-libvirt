@@ -10,7 +10,7 @@ t_ksm_npages_max = @ksm_npages_max.dup
 if t_ksm_npages_max.eql?('shmall') then
   t_ksm_npages_max = @shmall
 end
-  
+
 -%>
 # This file is managed by Puppet.
 # Any changes made to this file will be rewritten at the next Puppet run.
@@ -22,10 +22,10 @@ KSM_NPAGES_DECAY=<%= @ksm_npages_decay %>
 KSM_NPAGES_MIN=<%= t_ksm_npages_min %>
 KSM_NPAGES_MAX=<%= t_ksm_npages_max %>
 
-<% if not ksm_thres_coef.empty? then -%>
+<% if not @ksm_thres_coef.empty? then -%>
 KSM_THRES_COEF=<%= @ksm_thres_coef %>
 <% end -%>
-<% if not ksm_thres_const.empty? then -%>
+<% if not @ksm_thres_const.empty? then -%>
 KSM_THRES_CONST=<%= @ksm_thres_const %>
 <% end -%>
 

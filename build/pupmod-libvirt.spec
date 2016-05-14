@@ -1,7 +1,7 @@
 Summary: Libvirt Puppet Module
 Name: pupmod-libvirt
-Version: 4.1.0
-Release: 17
+Version: 4.1.1
+Release: 0
 License: Apache License, Version 2.0
 Group: Applications/System
 Source: %{name}-%{version}-%{release}.tar.gz
@@ -59,7 +59,7 @@ fi
 # Post uninstall stuff
 
 %changelog
-* Wed Dec 02 2015 Chris Tessmer <chris.tessmer@onyxpoint.com> - 4.1.0-17
+* Wed Dec 02 2015 Chris Tessmer <chris.tessmer@onyxpoint.com> - 4.1.1-0
 - Replaced all 'lsb*' facts with their (package-independent)
   'operatingsystem*' counterparts.
 - Common module assets have been normalized.
