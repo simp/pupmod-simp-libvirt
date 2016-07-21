@@ -1,0 +1,4 @@
+Requires: pupmod-iptables >= 4.1.0-3
+Requires: pupmod-simplib >= 1.0.0-0
+Requires: pupmod-sysctl >= 4.1.0-2
+Obsoletes: pupmod-libvirt-test >= 0.0.1
