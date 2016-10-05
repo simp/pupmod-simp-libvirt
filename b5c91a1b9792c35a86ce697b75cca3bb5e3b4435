@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_264d3e72",
+        "filename": "build/rpm_metadata/requires",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1004834
+      },
+      "writtenOn": "2016-10-05T13:24:58Z",
+      "side": 1,
+      "message": "Not Required",
+      "revId": "b5c91a1b9792c35a86ce697b75cca3bb5e3b4435",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_06523a13",
+        "filename": "build/rpm_metadata/requires",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1004834
+      },
+      "writtenOn": "2016-10-05T13:24:58Z",
+      "side": 1,
+      "message": "Not Required",
+      "revId": "b5c91a1b9792c35a86ce697b75cca3bb5e3b4435",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
