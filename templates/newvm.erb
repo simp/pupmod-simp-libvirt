@@ -78,7 +78,7 @@ if @graphics['type'] == 'vnc' or @graphics['type'] == 'spice' then
   @graphics['password'] and t_vinst_command += ",password=#{@graphics['password']}"
   @graphics['passwordvalidto'] and t_vinsta_command += ",passwordvalidto=#{@graphics['passwordvalidto']}"
 end
-      
+
 if !@arch.empty? then
     t_vinst_command += " --arch=#{@arch}"
 end
@@ -108,7 +108,7 @@ if not @cpu.empty? then
   @cpu['features'] and t_vinst_command += ",#{@cpu['features'].join(',')}"
   @cpu['match'] and t_vinst_command += ",match=#{@cpu['match']}"
   @cpu['vendor'] and t_vinst_command += ",vendor=#{@cpu['vendor']}"
-  
+
 end
 
 if !@description.empty? then
@@ -231,7 +231,7 @@ while still_running; do
   sleep 5;
 done
 
-echo 
+echo
 
 sleep 5;
 

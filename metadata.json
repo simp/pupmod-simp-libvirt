@@ -1,7 +1,7 @@
 {
   "name": "simp-libvirt",
   "version": "4.1.2",
-  "author": "simp",
+  "author": "SIMP Team",
   "summary": "manages Kibana 3 in a SIMP-compatible environment",
   "license": "Apache-2.0",
   "source": "https://github.com/simp/pupmod-simp-libvirt",
