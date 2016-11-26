@@ -1,3 +1,6 @@
+* Wed Nov 23 2016 Jeanne Greulich <jgreulich@onyxpoint.com> - 5.0.0-0
+- Bump major version number for SIMP 6
+
 * Wed Dec 02 2015 Chris Tessmer <chris.tessmer@onyxpoint.com> - 4.1.1-0
 - Replaced all 'lsb*' facts with their (package-independent)
   'operatingsystem*' counterparts.
