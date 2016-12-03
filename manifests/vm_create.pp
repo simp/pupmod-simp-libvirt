@@ -178,6 +178,25 @@ define libvirt::vm_create (
   $watchdog = { 'model' => 'default' }
 ) {
 
+  validate_integer($size)
+  validate_bool($sparse)
+  validate_integer($mem)
+  validate_array($networks)
+  validate_hash($vcpu_options)
+  validate_hash($numatune)
+  validate_hash($cpu)
+  validate_hash($security)
+  validate_bool($full_virt)
+  validate_bool($accelerate)
+  validate_bool($sound)
+  validate_bool($noapic)
+  validate_bool($noacpi)
+  validate_bool($pxe)
+  validate_absolute_path($target_dir)
+  validate_hash($disk_opts)
+  validate_hash($graphics)
+  validate_hash($watchdog)
+
   if !defined(File[$target_dir]) {
     exec { "make ${target_dir}":
       command => "/bin/mkdir -p -m 2755 ${target_dir}",
@@ -201,8 +220,8 @@ define libvirt::vm_create (
     require => File[$target_dir]
   }
 
-  if $::operatingsystem in ['RedHat','CentOS'] {
-    $exec_deps = $::operatingsystemmajrelease ? {
+  if $facts['operatingsystem'] in ['RedHat','CentOS'] {
+    $exec_deps = $facts['operatingsystemmajrelease'] ? {
       '7' => [
         File["/usr/local/sbin/vm-create-${name}.sh"],
         Package['virt-install'],
@@ -216,7 +235,7 @@ define libvirt::vm_create (
     }
   }
   else {
-    warning("${::operatingsystem} not yet supported. Current options are RedHat and CentOS.")
+    warning("${facts['operatingsystem']} not yet supported. Current options are RedHat and CentOS.")
   }
 
   exec { "vm-create-${name}":
@@ -224,23 +243,4 @@ define libvirt::vm_create (
     onlyif  => "/usr/bin/virsh domstate ${name}; /usr/bin/test \$? -ne 0",
     require => $exec_deps
   }
-
-  validate_integer($size)
-  validate_bool($sparse)
-  validate_integer($mem)
-  validate_array($networks)
-  validate_hash($vcpu_options)
-  validate_hash($numatune)
-  validate_hash($cpu)
-  validate_hash($security)
-  validate_bool($full_virt)
-  validate_bool($accelerate)
-  validate_bool($sound)
-  validate_bool($noapic)
-  validate_bool($noacpi)
-  validate_bool($pxe)
-  validate_absolute_path($target_dir)
-  validate_hash($disk_opts)
-  validate_hash($graphics)
-  validate_hash($watchdog)
 }

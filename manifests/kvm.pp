@@ -60,7 +60,7 @@ class libvirt::kvm {
     ensure => 'present',
     val    => '1'
   }
-  
+
   # Bypass the base hosts's IPTables
   sysctl { 'net.bridge.bridge-nf-call-arptables':
     ensure => 'present',
@@ -73,14 +73,14 @@ class libvirt::kvm {
 
   # TODO: Make native boolean when we use facter 2.0
   if $facts['ipv6_enabled'] == true {
-    sysctl { 'net.bridge.bridge-nf-call-ip6tables': 
+    sysctl { 'net.bridge.bridge-nf-call-ip6tables':
       ensure => 'present',
       val    => '0'
     }
   }
   else {
     sysctl { 'net.bridge.bridge-nf-call-ip6tables':
-      ensure => 'absent',
+      ensure => 'absent'
     }
   }
 }

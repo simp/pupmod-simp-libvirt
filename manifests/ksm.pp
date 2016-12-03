@@ -71,6 +71,17 @@ class libvirt::ksm (
   $ksm_thres_const = ''
 ) {
 
+  validate_integer($ksm_monitor_interval)
+  validate_integer($ksm_sleep_msec)
+  validate_integer($ksm_npages_boost)
+  validate_re($ksm_npages_decay, '^-\d+$')
+  validate_re($ksm_npages_min, '^(shmall|\d+)$')
+  validate_re($ksm_npages_max, '^(shmall|\d+)$')
+  validate_integer($ksm_thres_coef)
+
+  if $ksm_thres_const != '' {
+    validate_integer($ksm_thres_const)
+  }
   file { '/etc/ksmtuned.conf':
     owner   => 'root',
     group   => 'root',
@@ -100,16 +111,5 @@ class libvirt::ksm (
     hasstatus  => true,
     hasrestart => true,
     require    => Package['qemu-kvm']
-  }
-
-  validate_integer($ksm_monitor_interval)
-  validate_integer($ksm_sleep_msec)
-  validate_integer($ksm_npages_boost)
-  validate_re($ksm_npages_decay, '^-\d+$')
-  validate_re($ksm_npages_min, '^(shmall|\d+)$')
-  validate_re($ksm_npages_max, '^(shmall|\d+)$')
-  validate_integer($ksm_thres_coef)
-  if $ksm_thres_const != '' {
-    validate_integer($ksm_thres_const)
   }
 }
