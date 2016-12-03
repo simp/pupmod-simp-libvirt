@@ -11,6 +11,5 @@ fixtures:
     stdlib:
       repo: 'https://github.com/simp/puppetlabs-stdlib'
       branch: 'simp-master'
-    sysctl: 'https://github.com/simp/pupmod-simp-sysctl'
   symlinks:
     libvirt: "#{source_dir}"

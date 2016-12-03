@@ -7,8 +7,7 @@
 # * Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class libvirt::kvm {
-  include 'libvirt'
-  include 'sysctl'
+  include '::libvirt'
 
   exec { 'kvm_mod_check':
     command => '/usr/local/sbin/loadkvm.rb',
@@ -23,8 +22,8 @@ class libvirt::kvm {
     source => 'puppet:///modules/libvirt/loadkvm.rb'
   }
 
-  if $::operatingsystem in ['RedHat', 'CentOS'] {
-    $package_list = $::operatingsystemmajrelease ? {
+  if $facts['operatingsystem'] in ['RedHat', 'CentOS'] {
+    $package_list = $facts['operatingsystemmajrelease'] ? {
       '7' => [
         'ipxe-roms',
         'ipxe-roms-qemu',
@@ -45,7 +44,7 @@ class libvirt::kvm {
     }
   }
   else {
-    warning("${::operatingsystem} not yet supported. Current options are RedHat and CentOS")
+    warning("${facts['operatingsystem']} not yet supported. Current options are RedHat and CentOS")
   }
   package { $package_list:
     ensure => 'latest',
@@ -53,18 +52,35 @@ class libvirt::kvm {
   }
 
   # Enable Forwarding
-  sysctl::value { 'net.ipv4.conf.all.forwarding': value => '1' }
-  sysctl::value { 'net.ipv4.ip_forward': value => '1' }
+  sysctl { 'net.ipv4.conf.all.forwarding':
+    ensure => 'present',
+    val    => '1'
+  }
+  sysctl { 'net.ipv4.ip_forward':
+    ensure => 'present',
+    val    => '1'
+  }
 
   # Bypass the base hosts's IPTables
-  sysctl::value { 'net.bridge.bridge-nf-call-arptables': value => '0' }
-  sysctl::value { 'net.bridge.bridge-nf-call-iptables':  value => '0' }
+  sysctl { 'net.bridge.bridge-nf-call-arptables':
+    ensure => 'present',
+    val    => '0'
+  }
+  sysctl { 'net.bridge.bridge-nf-call-iptables':
+    ensure => 'present',
+    val    => '0'
+  }
 
   # TODO: Make native boolean when we use facter 2.0
-  if $::ipv6_enabled == true {
-    sysctl::value { 'net.bridge.bridge-nf-call-ip6tables': value => '0' }
+  if $facts['ipv6_enabled'] == true {
+    sysctl { 'net.bridge.bridge-nf-call-ip6tables':
+      ensure => 'present',
+      val    => '0'
+    }
   }
   else {
-    sysctl::value { 'net.bridge.bridge-nf-call-ip6tables': value => 'nil' }
+    sysctl { 'net.bridge.bridge-nf-call-ip6tables':
+      ensure => 'absent'
+    }
   }
 }
