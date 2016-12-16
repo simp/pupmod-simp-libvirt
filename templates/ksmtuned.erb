@@ -22,10 +22,10 @@ KSM_NPAGES_DECAY=<%= @ksm_npages_decay %>
 KSM_NPAGES_MIN=<%= t_ksm_npages_min %>
 KSM_NPAGES_MAX=<%= t_ksm_npages_max %>
 
-<% if not @ksm_thres_coef.empty? then -%>
+<% if not @ksm_thres_coef.nil? then -%>
 KSM_THRES_COEF=<%= @ksm_thres_coef %>
 <% end -%>
-<% if not @ksm_thres_const.empty? then -%>
+<% if not @ksm_thres_const.nil? then -%>
 KSM_THRES_CONST=<%= @ksm_thres_const %>
 <% end -%>
 

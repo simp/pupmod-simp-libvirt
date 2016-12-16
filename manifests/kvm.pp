@@ -1,10 +1,6 @@
-# == Class: libvirt::kvm
-#
 # Set up libvirt to use KVM.
 #
-# == Authors
-#
-# * Trevor Vaughan <tvaughan@onyxpoint.com>
+# @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class libvirt::kvm {
   include '::libvirt'

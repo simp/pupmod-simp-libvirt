@@ -8,7 +8,7 @@ t_vinst_command += " --noautoconsole"
 t_vinst_command += " --os-variant=#{@osvariant}"
 t_vinst_command += " --os-type=#{@ostype}"
 
-if not @networks.empty? then
+if not @networks.nil? then
   used_mac_addr = false
   Array(@networks).each do |t_network|
     if not ['bridge','network'].include?(t_network['type'].to_s) then
@@ -27,7 +27,7 @@ if not @networks.empty? then
 
     if t_network['mac'] then
       t_vinst_command += ",mac=#{@t_network['mac']}"
-    elsif !@mac_addr.empty? and !used_mac_addr then
+    elsif !@mac_addr.nil? and !used_mac_addr then
       t_vinst_command += ",mac=#{@mac_addr}"
       used_mac_addr = true
     end
@@ -35,11 +35,11 @@ if not @networks.empty? then
 # This is here for legacy purposes and should be removed at some point.
 # ##LEGACY##
 else
-  if !@mac_addr.empty? then
+  if !@mac_addr.nil? then
     t_vinst_command += " -m #{@mac_addr}"
   end
 
-  if has_variable?('bridge') and !@bridge.empty? then
+  if has_variable?('bridge') and !@bridge.nil? then
     t_vinst_command += " -w bridge:#{@bridge}"
   end
 end
@@ -49,13 +49,13 @@ t_vinst_command += " --vcpus=#{@vcpus}"
 t_valid_vcpu_options = ['maxvcpus','sockets','cores','threads']
 
 # Validate that all of the vcpu options passed are valid.
-if !@vcpu_options.empty? and !(@vcpu_options.keys - t_valid_vcpu_options).empty? then
+if !@vcpu_options.nil? and !(@vcpu_options.keys - t_valid_vcpu_options).nil? then
   raise Puppet::ParseError.new(
     "Error: vcpu_options was passed an invalid option. Valid options include '#{@t_valid_vcpu_options.join(', ')}'"
   )
 end
 
-if not @vcpu_options.empty? then
+if not @vcpu_options.nil? then
   t_valid_vcpu_options.each do |t_valid_vcpu_option|
   @vcpu_options[t_valid_vcpu_option] and t_vinst_command += ",#{@t_valid_vcpu_option}=#{@vcpu_options[t_valid_vcpu_option]}"
   end
@@ -79,15 +79,15 @@ if @graphics['type'] == 'vnc' or @graphics['type'] == 'spice' then
   @graphics['passwordvalidto'] and t_vinsta_command += ",passwordvalidto=#{@graphics['passwordvalidto']}"
 end
 
-if !@arch.empty? then
+if !@arch.nil? then
     t_vinst_command += " --arch=#{@arch}"
 end
 
-if !@machine.empty? then
+if !@machine.nil? then
     t_vinst_command += " --machine=#{@machine}"
 end
 
-if not @numatune.empty? then
+if not @numatune.nil? then
   if not @numatune['nodeset'] then
     raise Puppet::ParseError.new(
       "Error: 'nodeset' must be declared in the 'numatune' hash"
@@ -97,7 +97,7 @@ if not @numatune.empty? then
   @numatune['mode'] and t_vinst_command += ",mode=#{@numatune['mode']}"
 end
 
-if not @cpu.empty? then
+if not @cpu.nil? then
   if not @cpu['name'] then
     raise Puppet::ParseError.new(
       "Error: 'name' must be declared in the 'cpu' hash"
@@ -111,12 +111,12 @@ if not @cpu.empty? then
 
 end
 
-if !@description.empty? then
+if !@description.nil? then
     t_vinst_command += " --description='#{@description}'"
 end
 
 t_sec_type = ['static','dynamic']
-if not @security.empty? then
+if not @security.nil? then
   if not t_sec_type.include?(@security['type']) then
     raise Puppet::ParseError.new(
       "Error: 'security' => 'type' must be one of '#{@t_sec_type.join(", ")}'"
@@ -127,7 +127,7 @@ if not @security.empty? then
   @security['label'] and t_vinst_command += ",label=#{@security['label']}"
 end
 
-if !@cpuset.empty? then
+if !@cpuset.nil? then
     t_vinst_command += " --cpuset=#{@cpuset}"
 end
 
@@ -140,11 +140,11 @@ end
 t_disk_opts = ['bus','perms','cache','format','io','error_policy','serial']
 # Yes, I know this messes around with the permanent state of the object, but it
 # doesn't matter.
-if not @disk_bus.empty? and not @disk_opts['bus'] then
+if not @disk_bus.nil? and not @disk_opts['bus'] then
   @disk_opts['bus'] = @disk_bus
 end
 
-if not @disk_opts.empty? then
+if not @disk_opts.nil? then
   t_disk_opts.each do |t_disk_opt|
     if @disk_opts[t_disk_opt] then
       t_vinst_command += ",#{@t_disk_opt}=#{@disk_opts[t_disk_opt]}"
@@ -174,15 +174,15 @@ if @noacpi.to_s.eql?('true') then
     t_vinst_command += " --noacpi"
 end
 
-if !@virt_type.empty? then
+if !@virt_type.nil? then
     t_vinst_command += " --virt-type #{@virt_type}"
 end
 
-if !@host_device.empty? then
+if !@host_device.nil? then
     t_vinst_command += " --host-device #{@host_device}"
 end
 
-if not @watchdog.empty? then
+if not @watchdog.nil? then
     t_vinst_command += " --watchdog #{@watchdog['model']}"
     @watchdog['action'] and t_vinst_command += ",action=#{@watchdog['action']}"
 end
@@ -190,7 +190,7 @@ end
 if @pxe.to_s.eql?('true') then
     t_vinst_command += " --pxe"
 else
-    if @location_url.empty? then
+    if @location_url.nil? then
         raise SyntaxError, 'Error: $location_url cannot be empty if you are not using pxe'
     end
 
@@ -200,7 +200,7 @@ else
       t_vinst_command += " -l #{@location_url}"
     end
 
-    if !@ks_url.empty? then
+    if !@ks_url.nil? then
         t_vinst_command += " -x ks=#{@ks_url}"
     end
 end

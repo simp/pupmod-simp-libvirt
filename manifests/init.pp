@@ -1,11 +1,7 @@
-# == Class: libvirt
-#
 # Set up libvirt.  Install the necessary packages and make sure libvirtd is
 # running.
 #
-# == Authors
-#
-# * Trevor Vaughan <tvaughan@onyxpoint.com>
+# @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class libvirt {
 
