@@ -1,3 +1,8 @@
+* Fri Dec 16 2016 Nick Miller <nick.miller@onyxpoint.com> - 5.0.1-0
+- Strongly typed module
+- Moved docs to strings/yardoc format
+- Removed verb from vm_create class to vm
+
 * Thu Dec 01 2016 Nick Markowski <nmarkowski@keywcorp.com> - 5.0.1-0
 - Removed pupmod-simp-sysctl in favor of augeas-sysctl
 

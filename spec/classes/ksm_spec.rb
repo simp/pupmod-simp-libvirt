@@ -7,8 +7,8 @@ describe 'libvirt::ksm' do
         let(:facts) { os_facts.merge({ :shmall => '4294967296' })}
 
         let(:params) {{
-          :ksm_max_kernel_pages => '40',
-          :ksm_monitor_interval => '60'
+          :ksm_max_kernel_pages => 40,
+          :ksm_monitor_interval => 60
         }}
 
         it { is_expected.to create_class('libvirt::ksm') }

@@ -1,7 +1,3 @@
-# == Define: libvirt::vm_create
-#
-# No '/' in the name!
-#
 # The options in the vm_create() define use the exact same field syntax as
 # the virt-install command.
 #
@@ -12,8 +8,7 @@
 # If you do set up your own bridge, make sure your call of this define
 # 'require's that network stanza.
 #
-# == Examples
-#
+# @example
 #  libvirt::vm_create { 'test_system':
 #     mac_addr => 'AA:BB:CC:DD:EE:FF',
 #     size => '20',
@@ -22,24 +17,23 @@
 #     disk_opts => { 'bus' => 'virtio' }
 #  }
 #
-# == Parameters
-#
-# [*name*]
+# @param name
 #   Used to name the /usr/sbin/vm-create script
+#   No '/' in the name!
 #
-# [*size*]
-# [*mac_addr*]
-# [*sparse*]
-# [*mem*]
-# [*arch*]
-# [*machine*]
-# [*ostype*]
-# [*osvariant*]
-# [*bridge*]
+# @param size
+# @param mac_addr
+# @param sparse
+# @param mem
+# @param arch
+# @param machine
+# @param ostype
+# @param osvariant
+# @param bridge
 #   A legacy option for connecting to a single bridge. '$bridges' is now the
 #   favored option.
 #
-# [*networks*]
+# @param networks
 #   An array of hashes of networks where you can specify both the mac and
 #   model of each network if desired.
 #
@@ -61,19 +55,19 @@
 #       }
 #     ]
 #
-# [*vcpus*]
-# [*vcpu_options*]
+# @param vcpus
+# @param vcpu_options
 #   A hash of options that match the vcpus extended arguments.
 #   Options will be passed directly and without translation.
 #   Example:
 #     { 'maxvcpus' => '3', 'sockets' => '2' }
 #
-# [*numatune*]
+# @param numatune
 #   A hash of options that correspond to the numatune options.
 #   Example:
 #     { 'nodeset' => '1,2,3', 'mode' => 'preferred' }
 #
-# [*cpu*]
+# @param cpu
 #   A hash of the 'cpu' options:
 #     {
 #       'name'      => '<cpu_name>',
@@ -82,39 +76,39 @@
 #       'vendor'    => <vendor>
 #     }
 #
-# [*description*]
-# [*security*]
+# @param description
+# @param security
 #   A hash of the 'security' options:
 #     {
 #       'type'  => '<type>'
 #       'label' => '<label>'
 #     }
 #
-# [*cpuset*]
-# [*full_virt*]
-# [*accelerate*]
-# [*sound*]
-# [*noapic*]
-# [*noacpi*]
-# [*pxe*]
-# [*cdrom_path*]
-# [*location_url*]
+# @param cpuset
+# @param full_virt
+# @param accelerate
+# @param sound
+# @param noapic
+# @param noacpi
+# @param pxe
+# @param cdrom_path
+# @param location_url
 #   This has been overloaded to accept DVD ISO image paths as well.
 #   If the target ends in '.iso' the correct option will be used.
 #
-# [*ks_url*]
-# [*target_dir*]
+# @param ks_url
+# @param target_dir
 #   The directory in which to install the VM.
 #
-# [*disk_bus*]
+# @param disk_bus
 #   A legacy option now superseded by '$disk_opts'
 #
-# [*disk_opts*]
+# @param disk_opts
 #   A hash of options as presented to the disk parameter of virt-install
 #   Supported options are:
 #   bus, perms, cache, format, io, error_policy, serial
 #
-# [*graphics*]
+# @param graphics
 #   A hash of options that are passed to the '--graphics' option of
 #   virt-install, see the man page for details.
 #
@@ -129,73 +123,49 @@
 #     'passwordvalidto'  => <expire date for password> #optional
 #   }
 #
-# [*virt_type*]
-# [*host_device*]
-# [*watchdog*]
+# @param virt_type
+# @param host_device
+# @param watchdog
 #   A hash of options to pass to the watchdog option of virt-install.
 #   Options are 'model', and 'action'(optional)
 #
-# == Authors
+# @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
-# * Trevor Vaughan <tvaughan@onyxpoint.com>
-#
-define libvirt::vm_create (
-  $size,
-  $mac_addr = '',
-  $sparse = false,
-  $mem = '512',
-  $arch = '',
-  $machine = '',
-  $ostype = 'linux',
-  $osvariant = 'rhel6',
-  $bridge = 'virbr0',
-  $networks = [],
-  $vcpus = '1',
-  $vcpu_options = {},
-  $numatune = {},
-  $cpu = {},
-  $description = '',
-  $security = {},
-  $cpuset = '',
-  $full_virt = true,
-  $accelerate = true,
-  $sound = true,
-  $noapic = false,
-  $noacpi = false,
-  $pxe = false,
-  $cdrom_path = '',
-  $location_url = '',
-  $ks_url = '',
-  $target_dir = versioncmp(simp_version(),'5') ? { '-1' => '/srv/VM', default => '/var/VM' },
-  $disk_bus = '',
-  $disk_opts = {},
-  $graphics = {
-    'type' => 'vnc',
-    'keymap' =>  'en_us'
-  },
-  $virt_type = '',
-  $host_device = '',
-  $watchdog = { 'model' => 'default' }
+define libvirt::vm (
+  Integer              $size,
+  Optional[String]     $mac_addr     = undef,
+  Boolean              $sparse       = false,
+  Integer              $mem          = 512,
+  Optional[String]     $arch         = undef,
+  Optional[String]     $machine      = undef,
+  String               $ostype       = 'linux',
+  String               $osvariant    = 'rhel6',
+  String               $bridge       = 'virbr0',
+  Optional[Array]      $networks     = undef,
+  Integer              $vcpus        = 1,
+  Optional[Hash]       $vcpu_options = undef,
+  Optional[Hash]       $numatune     = undef,
+  Optional[Hash]       $cpu          = undef,
+  Optional[String]     $description  = undef,
+  Optional[Hash]       $security     = undef,
+  Optional[String]     $cpuset       = undef,
+  Boolean              $full_virt    = true,
+  Boolean              $accelerate   = true,
+  Boolean              $sound        = true,
+  Boolean              $noapic       = false,
+  Boolean              $noacpi       = false,
+  Boolean              $pxe          = false,
+  Optional[String]     $cdrom_path   = undef,
+  Optional[String]     $location_url = undef,
+  Optional[String]     $ks_url       = undef,
+  Stdlib::AbsolutePath $target_dir   = '/var/VM',
+  Optional[String]     $disk_bus     = undef,
+  Optional[Hash]       $disk_opts    = undef,
+  Hash                 $graphics     = { 'type' => 'vnc', 'keymap' => 'en_us' },
+  Optional[String]     $virt_type    = undef,
+  Optional[String]     $host_device  = undef,
+  Hash                 $watchdog     = { 'model' => 'default' }
 ) {
-
-  validate_integer($size)
-  validate_bool($sparse)
-  validate_integer($mem)
-  validate_array($networks)
-  validate_hash($vcpu_options)
-  validate_hash($numatune)
-  validate_hash($cpu)
-  validate_hash($security)
-  validate_bool($full_virt)
-  validate_bool($accelerate)
-  validate_bool($sound)
-  validate_bool($noapic)
-  validate_bool($noacpi)
-  validate_bool($pxe)
-  validate_absolute_path($target_dir)
-  validate_hash($disk_opts)
-  validate_hash($graphics)
-  validate_hash($watchdog)
 
   if !defined(File[$target_dir]) {
     exec { "make ${target_dir}":

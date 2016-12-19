@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'libvirt::vm_create' do
+describe 'libvirt::vm' do
 
   let(:title) {'foo_vm'}
   let(:facts) {{
@@ -8,7 +8,7 @@ describe 'libvirt::vm_create' do
     :operatingsystem   => 'CentOS'
   }}
   let(:params) {{
-    :size       => '50',
+    :size       => 50,
     :pxe        => true,
     :target_dir => '/tmp/test_libvirt'
   }}
