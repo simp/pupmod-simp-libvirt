@@ -1,0 +1,40 @@
+#!/bin/sh
+
+
+still_running () { ps -f -C qemu-kvm | grep 'foo_vm' | grep 'no-reboot' >& /dev/null; return $?; }
+
+ignore='false'
+if [ "$1" == '-i' ]; then
+  ignore='true'
+fi
+
+if [ "$ignore" == 'true' ] || [ `ls "/tmp/test_libvirt/foo_vm" 2>/dev/null | wc -l` -eq 0 ]; then
+  mkdir -p -m 750 "/tmp/test_libvirt/foo_vm";
+else
+  echo "VM foo_vm already exists, not creating";
+  exit 0;
+fi
+
+/usr/bin/virt-install -n "foo_vm" -r 512 --noautoconsole --os-variant=rhel6 --os-type=linux -w bridge:virbr0 --vcpus=1 --graphics vnc,keymap=en_us --disk=path='/tmp/test_libvirt/foo_vm/Disk1',size=100,sparse='false' -v --accelerate --sound --watchdog default --pxe
+
+/usr/bin/virsh autostart foo_vm;
+
+echo -n "Installing foo_vm: "
+
+while still_running; do
+  echo -n '>';
+  sleep 5;
+done
+
+echo
+
+sleep 5;
+
+echo "Starting foo_vm";
+
+/usr/bin/virsh start foo_vm;
+
+# Fire off a KSM run if it exists.
+if [ -d /sys/kernel/mm/ksm ]; then
+  echo '1' > /sys/kernel/mm/ksm/run
+fi
