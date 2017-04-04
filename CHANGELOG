@@ -1,3 +1,7 @@
+* Tue Apr 04 2017 Jeanne Greulich <jeanne.greulich@onyxpoint.com> 5.0.2-0
+- fixed an error in types that prevents this from running
+- updated travis files
+
 * Fri Dec 16 2016 Nick Miller <nick.miller@onyxpoint.com> - 5.0.1-0
 - Strongly typed module
 - Moved docs to strings/yardoc format

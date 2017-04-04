@@ -54,7 +54,7 @@
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class libvirt::ksm (
-  Integer                         $ksm_max_kernel_pages = undef,
+  Optional[Integer]               $ksm_max_kernel_pages = undef,
   Integer                         $ksm_monitor_interval = 60,
   Integer                         $ksm_sleep_msec       = 100,
   Integer                         $ksm_npages_boost     = 3000,
