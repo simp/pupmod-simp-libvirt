@@ -1,6 +1,10 @@
 # Set up libvirt.  Install the necessary packages and make sure libvirtd is
 # running.
 #
+# The easiest way to obtain all package dependencies for libvirt is to
+# unpack the distribution ISO that corresponds with your flavor of SIMP.
+# SIMP provides a utility for exactly that, `/usr/local/bin/unpack_dvd`
+#
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class libvirt {

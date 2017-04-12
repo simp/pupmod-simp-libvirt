@@ -1,3 +1,6 @@
+* Wed Apr 12 2017 Nick Markowski <nmarkowski@keywcorp.com> - 5.0.3-0
+- Added some in-code docs to help users track down libvirt dependencies.
+
 * Tue Apr 04 2017 Jeanne Greulich <jeanne.greulich@onyxpoint.com> 5.0.2-0
 - fixed an error in types that prevents this from running
 - updated travis files
