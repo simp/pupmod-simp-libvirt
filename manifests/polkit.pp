@@ -9,12 +9,12 @@
 # @param rulesd Location of the poklit rules directory
 #
 class libvirt::polkit (
-  Enum['present','absent'] $ensure   = 'present',
-  String                   $group    = 'virtusers',
-  Integer[0,99]            $priority = 10,
-  Polkit::Result           $result   = 'yes',
-  Boolean                  $local    = true,
-  Boolean                  $active   = true,
+  Enum['present','absent']      $ensure   = 'present',
+  Variant[String,Array[String]] $group    = 'virtusers',
+  Integer[0,99]                 $priority = 10,
+  Polkit::Result                $result   = 'yes',
+  Boolean                       $local    = true,
+  Boolean                       $active   = true,
 ) {
 
   polkit::authorization::basic_policy { "Allow users in ${group} to use libvirt":
