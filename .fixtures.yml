@@ -1,9 +1,10 @@
 ---
 fixtures:
   repositories:
-    augeasproviders_core: 'https://github.com/simp/augeasproviders_core'
-    augeasproviders_sysctl: 'https://github.com/simp/augeasproviders_sysctl'
-    simplib: 'https://github.com/simp/pupmod-simp-simplib'
-    stdlib: 'https://github.com/simp/puppetlabs-stdlib'
+    augeasproviders_core: https://github.com/simp/augeasproviders_core
+    augeasproviders_sysctl: https://github.com/simp/augeasproviders_sysctl
+    polkit: https://github.com/simp/pupmod-simp-polkit
+    simplib: https://github.com/simp/pupmod-simp-simplib
+    stdlib: https://github.com/simp/puppetlabs-stdlib
   symlinks:
     libvirt: "#{source_dir}"

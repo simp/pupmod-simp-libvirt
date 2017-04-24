@@ -15,7 +15,7 @@
   ],
   "dependencies": [
     {
-      "name": "simp-simplib",
+      "name": "simp/simplib",
       "version_requirement": ">= 3.1.0 < 4.0.0"
     },
     {
@@ -23,7 +23,11 @@
       "version_requirement": ">= 4.13.1 < 5.0.0"
     },
     {
-      "name": "herculesteam-augeasproviders_sysctl",
+      "name": "simp/polkit",
+      "version_requirement": ">= 6.1.0 < 7.0.0"
+    },
+    {
+      "name": "herculesteam/augeasproviders_sysctl",
       "version_requirement": ">= 2.1.0 < 3.0.0"
     }
   ],
@@ -46,8 +50,7 @@
     "requirements": [
     {
       "name": "puppet",
-      "version_requirement": "4.x"
+      "version_requirement": ">= 4.6.0 < 5.0.0"
     }
-  ],
-  "data_provider": "hiera"
+  ]
 }
