@@ -1,5 +1,6 @@
 * Mon Apr 17 2017 Nick Miller <nick.miller@onyxpoint.com> - 5.0.3-0
 - Add class to manage polkit rules for libvirt
+- Update puppet requirement in metadata.json
 
 * Wed Apr 12 2017 Nick Markowski <nmarkowski@keywcorp.com> - 5.0.3-0
 - Added some in-code docs to help users track down libvirt dependencies.
