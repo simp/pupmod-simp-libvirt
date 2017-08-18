@@ -16,7 +16,7 @@ describe 'libvirt::kvm' do
           if (os_facts[:ipv6_enabled])
             it { is_expected.to contain_sysctl( 'net.bridge.bridge-nf-call-ip6tables' ) }
           else
-            it { is_expected.to_not contain_sysctl( 'net.bridge.bridge-nf-call-ip6tables' ) }
+            it { is_expected.to contain_sysctl( 'net.bridge.bridge-nf-call-ip6tables' ).with(:ensure => 'absent') }
           end
 
           if (os_facts[:operatingsystemmajrelease].to_s >= '7')
