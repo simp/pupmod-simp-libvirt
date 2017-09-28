@@ -4,7 +4,7 @@ describe 'libvirt::vm' do
   let(:title) {'foo_vm'}
   let(:facts) {{
     :operatingsystemmajrelease => '6',
-    :operatingsystem   => 'CentOS'
+    :operatingsystem           => 'CentOS'
   }}
   {
     "default" => {

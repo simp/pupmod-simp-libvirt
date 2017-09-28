@@ -167,6 +167,8 @@ define libvirt::vm (
   Hash                 $watchdog     = { 'model' => 'default' }
 ) {
 
+  include 'libvirt'
+
   if !defined(File[$target_dir]) {
     exec { "make ${target_dir}":
       command => "/bin/mkdir -p -m 2755 ${target_dir}",
