@@ -1,14 +1,14 @@
 <%
 # Variable Munging
 
-t_ksm_npages_min = @ksm_npages_min.dup
-if t_ksm_npages_min.eql?('shmall') then
-  t_ksm_npages_min = @shmall.to_i/2
+ksm_npages_min = @ksm_npages_min.dup
+if ksm_npages_min.eql?('shmall')
+  ksm_npages_min = @facts['simplib_sysctl']['kernel.shmall'].to_i/2
 end
 
-t_ksm_npages_max = @ksm_npages_max.dup
-if t_ksm_npages_max.eql?('shmall') then
-  t_ksm_npages_max = @shmall
+ksm_npages_max = @ksm_npages_max.dup
+if ksm_npages_max.eql?('shmall')
+  ksm_npages_max = @facts['simplib_sysctl']['kernel.shmall']
 end
 
 -%>
@@ -19,13 +19,13 @@ KSM_MONITOR_INTERVAL=<%= @ksm_monitor_interval %>
 KSM_SLEEP_MSEC=<%= @ksm_sleep_msec %>
 KSM_NPAGES_BOOST=<%= @ksm_npages_boost %>
 KSM_NPAGES_DECAY=<%= @ksm_npages_decay %>
-KSM_NPAGES_MIN=<%= t_ksm_npages_min %>
-KSM_NPAGES_MAX=<%= t_ksm_npages_max %>
+KSM_NPAGES_MIN=<%= ksm_npages_min %>
+KSM_NPAGES_MAX=<%= ksm_npages_max %>
 
-<% if not @ksm_thres_coef.nil? then -%>
+<% unless @ksm_thres_coef.nil? -%>
 KSM_THRES_COEF=<%= @ksm_thres_coef %>
 <% end -%>
-<% if not @ksm_thres_const.nil? then -%>
+<% unless @ksm_thres_const.nil? -%>
 KSM_THRES_CONST=<%= @ksm_thres_const %>
 <% end -%>
 
