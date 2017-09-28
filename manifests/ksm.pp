@@ -64,6 +64,7 @@ class libvirt::ksm (
   Integer                         $ksm_thres_coef       = 10,
   Optional[Integer]               $ksm_thres_const      = undef
 ) {
+  include 'libvirt::kvm'
 
   file { '/etc/ksmtuned.conf':
     owner   => 'root',
