@@ -26,8 +26,7 @@ before_install:
 
 jobs:
   allow_failures:
-    - stage: spec
-      env: STRICT_VARIABLES=yes TRUSTED_NODE_DATA=yes PUPPET_VERSION="~> 5.0"
+    - env: STRICT_VARIABLES=yes TRUSTED_NODE_DATA=yes PUPPET_VERSION="~> 5.0"
 
   include:
     - stage: check
