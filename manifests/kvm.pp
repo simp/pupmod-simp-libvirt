@@ -1,82 +1,55 @@
 # Set up libvirt to use KVM.
 #
-# @author Trevor Vaughan <tvaughan@onyxpoint.com>
+# @author https://github.com/simp/pupmod-simp-libvirt/graphs/contributors
 #
 class libvirt::kvm {
-  include '::libvirt'
+  include 'libvirt'
 
-  exec { 'kvm_mod_check':
-    command => '/usr/local/sbin/loadkvm.rb',
-    require => File['/usr/local/sbin/loadkvm.rb'],
-    before  => Service['libvirtd']
+  $kvm_package_list = $::libvirt::kvm_package_list
+  $package_ensure   = $::libvirt::package_ensure
+  $manage_sysctl    = $::libvirt::manage_sysctl
+  $load_kernel_modules = $::libvirt::load_kernel_modules
+
+  package { $kvm_package_list:
+    ensure => $package_ensure,
   }
 
-  file { '/usr/local/sbin/loadkvm.rb':
-    owner  => 'root',
-    group  => 'root',
-    mode   => '0750',
-    source => 'puppet:///modules/libvirt/loadkvm.rb'
-  }
-
-  if $facts['operatingsystem'] in ['RedHat', 'CentOS'] {
-    $package_list = $facts['operatingsystemmajrelease'] ? {
-      '7' => [
-        'ipxe-roms',
-        'ipxe-roms-qemu',
-        'qemu-kvm',
-        'qemu-kvm-tools',
-        'qemu-img',
-        'libsndfile'
-      ],
-      default => [
-        'gpxe-roms',
-        'gpxe-roms-qemu',
-        'qemu-kvm',
-        'qemu-kvm-tools',
-        'qemu-img',
-        'virt-v2v',
-        'libsndfile'
-      ]
+  if $load_kernel_modules {
+    $cpuvendor = $facts['cpuinfo']['processor0']['vendor_id']
+    $kmod = $cpuvendor ? {
+      'AuthenticAMD' => 'kvm-amd',
+      'GenuineIntel' => 'kvm-intel',
+      default        => fail('libvirt: Unknown CPU vendor_id')
+    }
+    kmod::load { $kmod:
+      before => Package[$kvm_package_list]
     }
   }
-  else {
-    warning("${facts['operatingsystem']} not yet supported. Current options are RedHat and CentOS")
-  }
-  package { $package_list:
-    ensure => 'latest',
-    notify => Exec['kvm_mod_check']
-  }
 
-  # Enable Forwarding
-  sysctl { 'net.ipv4.conf.all.forwarding':
-    ensure => 'present',
-    val    => '1'
-  }
-  sysctl { 'net.ipv4.ip_forward':
-    ensure => 'present',
-    val    => '1'
-  }
+  if $manage_sysctl {
+    sysctl {
+      default: ensure => 'present';
 
-  # Bypass the base hosts's IPTables
-  sysctl { 'net.bridge.bridge-nf-call-arptables':
-    ensure => 'present',
-    val    => '0'
-  }
-  sysctl { 'net.bridge.bridge-nf-call-iptables':
-    ensure => 'present',
-    val    => '0'
-  }
+      # Enable Forwarding
+      'net.ipv4.conf.all.forwarding': value => '1';
+      'net.ipv4.ip_forward':          value => '1';
 
-  # TODO: Make native boolean when we use facter 2.0
-  if $facts['ipv6_enabled'] == true {
-    sysctl { 'net.bridge.bridge-nf-call-ip6tables':
-      ensure => 'present',
-      val    => '0'
+      # Bypass the base hosts's IPTables
+      'net.bridge.bridge-nf-call-arptables': value => '0';
+      'net.bridge.bridge-nf-call-iptables':  value => '0';
     }
-  }
-  else {
-    sysctl { 'net.bridge.bridge-nf-call-ip6tables':
-      ensure => 'absent'
+
+    # TODO: Make native boolean when we use facter 2.0
+    if $facts['ipv6_enabled'] == true {
+      sysctl { 'net.bridge.bridge-nf-call-ip6tables':
+        ensure => 'present',
+        value  => '0'
+      }
+    }
+    else {
+      sysctl { 'net.bridge.bridge-nf-call-ip6tables':
+        ensure => 'absent'
+      }
     }
   }
 }

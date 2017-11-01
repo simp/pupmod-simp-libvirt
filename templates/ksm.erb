@@ -1,6 +1,6 @@
 # This file is managed by Puppet.
 # Any changes made to this file will be rewritten at the next Puppet run.
 
-<% if not @ksm_max_kernel_pages.nil? then -%>
+<% unless @ksm_max_kernel_pages.nil? -%>
 KSM_MAX_KERNEL_PAGES=<%= @ksm_max_kernel_pages %>
 <% end -%>

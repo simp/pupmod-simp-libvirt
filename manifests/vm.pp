@@ -10,14 +10,14 @@
 #
 # @example
 #  libvirt::vm_create { 'test_system':
-#     mac_addr => 'AA:BB:CC:DD:EE:FF',
-#     size => '20',
-#     networks => { 'type' => 'bridge', target =>  'br0' },
-#     pxe => true,
+#     mac_addr  => 'AA:BB:CC:DD:EE:FF',
+#     size      => 20,
+#     networks  => { 'type' => 'bridge', target =>  'br0' },
+#     pxe       => true,
 #     disk_opts => { 'bus' => 'virtio' }
 #  }
 #
-# @param name
+# @attr name
 #   Used to name the /usr/sbin/vm-create script
 #   No '/' in the name!
 #
@@ -42,16 +42,16 @@
 #   Example:
 #     [
 #       {
-#         'type'    => 'bridge',
-#         'target'  => '<bridge>',
-#         'mac'     => '<macaddr>', # Optional
-#         'model'   => '<model>', # Optional
+#         'type'   => 'bridge',
+#         'target' => '<bridge>',
+#         'mac'    => '<macaddr>', # Optional
+#         'model'  => '<model>',   # Optional
 #       },
 #       {
-#         'type'    => 'network'
-#         'target'  => '<network1>',
-#         'mac'     => '<macaddr>', # Optional
-#         'model'   => '<model>', # Optional
+#         'type'   => 'network'
+#         'target' => '<network1>',
+#         'mac'    => '<macaddr>', # Optional
+#         'model'  => '<model>',   # Optional
 #       }
 #     ]
 #
@@ -70,10 +70,10 @@
 # @param cpu
 #   A hash of the 'cpu' options:
 #     {
-#       'name'      => '<cpu_name>',
-#       'features'  => ['+<feature>','-<feature>','disable=<feature>']
-#       'match'     => <match>
-#       'vendor'    => <vendor>
+#       'name'     => '<cpu_name>',
+#       'features' => ['+<feature>','-<feature>','disable=<feature>']
+#       'match'    => <match>
+#       'vendor'   => <vendor>
 #     }
 #
 # @param description
@@ -114,13 +114,13 @@
 #
 #   Example:
 #   {
-#     'type'              => 'vnc',
-#     'port'              => <port>                     #optional
-#     'tlsport'           => <spice tls port>           #optional
-#     'listen'            => <listen address>           #optional
-#     'keymap'            => <virtual keymap>           #optional
-#     'password'          => <password>                 #optional
-#     'passwordvalidto'  => <expire date for password> #optional
+#     'type'            => 'vnc',
+#     'port'            => <port>                     #optional
+#     'tlsport'         => <spice tls port>           #optional
+#     'listen'          => <listen address>           #optional
+#     'keymap'          => <virtual keymap>           #optional
+#     'password'        => <password>                 #optional
+#     'passwordvalidto' => <expire date for password> #optional
 #   }
 #
 # @param virt_type
@@ -129,7 +129,7 @@
 #   A hash of options to pass to the watchdog option of virt-install.
 #   Options are 'model', and 'action'(optional)
 #
-# @author Trevor Vaughan <tvaughan@onyxpoint.com>
+# @author https://github.com/simp/pupmod-simp-libvirt/graphs/contributors
 #
 define libvirt::vm (
   Integer              $size,

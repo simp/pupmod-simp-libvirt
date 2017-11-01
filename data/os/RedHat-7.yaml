@@ -1,0 +1,8 @@
+---
+
+libvirt::package_list:
+- virt-install
+
+libvirt::kvm_package_list:
+- ipxe-roms
+- ipxe-roms-qemu

@@ -2,11 +2,17 @@
 #
 # @param ensure Create or destroy the rules file
 #
-# @param content An arbitrary string of javascript polkit configuration
+# @param group The group that membership is checked against
 #
 # @param priority Priority of the file to be created
 #
-# @param rulesd Location of the poklit rules directory
+# @param result Deny of approve access
+#
+# @param local Require users to be at a local seat
+#
+# @param active Require users to have an active session
+#
+# @author https://github.com/simp/pupmod-simp-libvirt/graphs/contributors
 #
 class libvirt::polkit (
   Enum['present','absent']      $ensure   = 'present',

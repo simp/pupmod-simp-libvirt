@@ -51,7 +51,7 @@
 #   NOTE: Only KSM_THRES_CONST or KSM_THRES_COEF is actually used.  Whichever
 #   results in a larger number wins.
 #
-# @author Trevor Vaughan <tvaughan@onyxpoint.com>
+# @author https://github.com/simp/pupmod-simp-libvirt/graphs/contributors
 #
 class libvirt::ksm (
   Optional[Integer]               $ksm_max_kernel_pages = undef,
@@ -73,6 +73,11 @@ class libvirt::ksm (
     content => template('libvirt/ksmtuned.erb'),
     notify  => Service['ksmtuned']
   }
+  service { 'ksmtuned':
+    ensure  => 'running',
+    enable  => true,
+    require => Package['qemu-kvm']
+  }
 
   file { '/etc/sysconfig/ksm':
     owner   => 'root',
@@ -81,19 +86,9 @@ class libvirt::ksm (
     content => template('libvirt/ksm.erb'),
     notify  => Service['ksm']
   }
-
   service { 'ksm':
-    enable     => true,
-    hasstatus  => true,
-    hasrestart => true,
-    require    => Package['qemu-kvm']
+    enable  => true,
+    require => Package['qemu-kvm']
   }
 
-  service { 'ksmtuned':
-    ensure     => 'running',
-    enable     => true,
-    hasstatus  => true,
-    hasrestart => true,
-    require    => Package['qemu-kvm']
-  }
 }
