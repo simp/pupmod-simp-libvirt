@@ -1,15 +1,16 @@
-# The options in the vm_create() define use the exact same field syntax as
+# The options in the ``vm()`` define use the exact same field syntax as
 # the virt-install command.
 #
-# See virt-install(1) for variable details.
+# See ``virt-install(1)`` for variable details.
 #
-# If virbr0 doesn't do what you need it to, you may need to set up your own
+# If ``virbr0`` doesn't do what you need it to, you may need to set up your own
 # bridge using the networking module.
+#
 # If you do set up your own bridge, make sure your call of this define
 # 'require's that network stanza.
 #
 # @example
-#  libvirt::vm_create { 'test_system':
+#  libvirt::vm { 'test_system':
 #     mac_addr  => 'AA:BB:CC:DD:EE:FF',
 #     size      => 20,
 #     networks  => { 'type' => 'bridge', target =>  'br0' },

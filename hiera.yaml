@@ -2,9 +2,12 @@
 version: 4
 datadir: data
 hierarchy:
-  - name: "OSFamily + Release"
+  - name: "OS + Release"
     backend: "yaml"
-    path: "os/%{facts.osfamily}-%{facts.operatingsystemmajrelease}"
+    path: "os/%{facts.operatingsystem}-%{facts.operatingsystemmajrelease}"
+  - name: "OS"
+    backend: "yaml"
+    path: "os/%{facts.operatingsystem}"
   - name: "OSFamily"
     backend: "yaml"
     path: "os/%{facts.osfamily}"

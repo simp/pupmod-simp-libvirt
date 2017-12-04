@@ -1,9 +1,20 @@
 # A class to configure Kernel Shared Memory components.
-# This isn't strictly tied to libvirt, but it's included in the qemu-kvm
+#
+# This isn't strictly tied to ``libvirt``, but it's included in the qemu-kvm
 # package so it made sense to include it here.
 #
 # Since there are no useful man pages at this time, the comments were lifted
 # from the configuration files.
+#
+# @param package_list
+#   The list of required packages for this module.
+#   Source: **Data in Modules**
+#
+# @param package_ensure
+#   ``ensure`` setting for all packages in this module
+#
+# @param enable
+#   Enable the ``ksm`` related sevices
 #
 # @param ksm_max_kernel_pages
 #   The maximum number of unswappable kernel pages which may be allocated by
@@ -54,6 +65,9 @@
 # @author https://github.com/simp/pupmod-simp-libvirt/graphs/contributors
 #
 class libvirt::ksm (
+  Array[String]                   $package_list,
+  String                          $package_ensure = simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' }),
+  Boolean                         $enable               = true,
   Optional[Integer]               $ksm_max_kernel_pages = undef,
   Integer                         $ksm_monitor_interval = 60,
   Integer                         $ksm_sleep_msec       = 100,
@@ -64,7 +78,13 @@ class libvirt::ksm (
   Integer                         $ksm_thres_coef       = 10,
   Optional[Integer]               $ksm_thres_const      = undef
 ) {
-  include 'libvirt::kvm'
+
+  ensure_packages( $package_list,
+    {
+      'ensure' => $package_ensure,
+      'notify' => [ Service['ksmtuned'], Service['ksm'] ]
+    }
+  )
 
   file { '/etc/ksmtuned.conf':
     owner   => 'root',
@@ -73,10 +93,12 @@ class libvirt::ksm (
     content => template('libvirt/ksmtuned.erb'),
     notify  => Service['ksmtuned']
   }
+
+  $_ensure = $enable ? { true => 'running', false => undef }
+
   service { 'ksmtuned':
-    ensure  => 'running',
-    enable  => true,
-    require => Package['qemu-kvm']
+    ensure  => $_ensure,
+    enable  => $enable
   }
 
   file { '/etc/sysconfig/ksm':
@@ -86,9 +108,8 @@ class libvirt::ksm (
     content => template('libvirt/ksm.erb'),
     notify  => Service['ksm']
   }
-  service { 'ksm':
-    enable  => true,
-    require => Package['qemu-kvm']
-  }
 
+  service { 'ksm':
+    enable  => $enable
+  }
 }

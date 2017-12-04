@@ -1,16 +1,22 @@
 # Add a rule file allowing members of a group to use libvirt
 #
-# @param ensure Create or destroy the rules file
+# @param ensure
+#   Create or destroy the rules file
 #
-# @param group The group that membership is checked against
+# @param group
+#   The group that membership is checked against
 #
-# @param priority Priority of the file to be created
+# @param priority
+#   Priority of the file to be created
 #
-# @param result Deny of approve access
+# @param result
+#   Deny of approve access
 #
-# @param local Require users to be at a local seat
+# @param local
+#   Require users to be at a local seat
 #
-# @param active Require users to have an active session
+# @param active
+#   Require users to have an active session
 #
 # @author https://github.com/simp/pupmod-simp-libvirt/graphs/contributors
 #
@@ -20,7 +26,7 @@ class libvirt::polkit (
   Integer[0,99]                 $priority = 10,
   Polkit::Result                $result   = 'yes',
   Boolean                       $local    = true,
-  Boolean                       $active   = true,
+  Boolean                       $active   = true
 ) {
 
   polkit::authorization::basic_policy { "Allow users in ${group} to use libvirt":
@@ -30,7 +36,6 @@ class libvirt::polkit (
     result    => $result,
     local     => $local,
     active    => $active,
-    action_id => 'org.libvirt.unix.manage',
+    action_id => 'org.libvirt.unix.manage'
   }
-
 }

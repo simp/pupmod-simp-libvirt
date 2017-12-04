@@ -8,29 +8,3 @@ lookup_options:
     merge:
       strategy: deep
       knockout_prefix: --
-
-libvirt::package_list:
-- libvirt
-- virt-viewer
-
-libvirt::service_ensure: running
-libvirt::ksm: false
-libvirt::kvm: true
-
-libvirt::ksm_max_kernel_pages: ~
-libvirt::ksm_monitor_interval: 60
-libvirt::ksm_sleep_msec: 100
-libvirt::ksm_npages_boost: 3000
-libvirt::ksm_npages_decay: -50
-libvirt::ksm_npages_min: shmall
-libvirt::ksm_npages_max: shmall
-libvirt::ksm_thres_coef: 10
-libvirt::ksm_thres_const: ~
-
-libvirt::manage_sysctl: true
-libvirt::load_kernel_modules: true
-libvirt::kvm_package_list:
-- libsndfile
-- qemu-img
-- qemu-kvm
-- qemu-kvm-tools
