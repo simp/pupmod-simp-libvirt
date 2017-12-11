@@ -1,0 +1,12 @@
+---
+
+libvirt::package_list:
+- python-virtinst
+
+libvirt::kvm_package_list:
+- gpxe-roms
+- gpxe-roms-qemu
+- virt-v2v
+
+libvirt::ksm::package_list:
+  - qemu-kvm

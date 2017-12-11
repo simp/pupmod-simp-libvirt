@@ -1,82 +1,80 @@
-# Set up libvirt to use KVM.
+# Set up libvirt to use KVM
 #
-# @author Trevor Vaughan <tvaughan@onyxpoint.com>
+# @param package_list
+#   List of packages to be managed for KVM
 #
-class libvirt::kvm {
-  include '::libvirt'
+# @param package_ensure
+# @param manage_sysctl
+# @param load_kernel_modules
+#
+# @author https://github.com/simp/pupmod-simp-libvirt/graphs/contributors
+#
+class libvirt::kvm (
+  $package_list       = [
+    'libsndfile',
+    'qemu-img',
+    'qemu-kvm',
+    'qemu-kvm-tools'
+  ],
+  $package_ensure      = $::libvirt::package_ensure,
+  $manage_sysctl       = $::libvirt::manage_sysctl,
+  $load_kernel_modules = $::libvirt::load_kernel_modules
+) inherits libvirt {
 
-  exec { 'kvm_mod_check':
-    command => '/usr/local/sbin/loadkvm.rb',
-    require => File['/usr/local/sbin/loadkvm.rb'],
-    before  => Service['libvirtd']
-  }
+  ensure_packages($package_list, { ensure => $package_ensure } )
 
-  file { '/usr/local/sbin/loadkvm.rb':
-    owner  => 'root',
-    group  => 'root',
-    mode   => '0750',
-    source => 'puppet:///modules/libvirt/loadkvm.rb'
-  }
+  if $load_kernel_modules {
+    $_kvm_kmod = $facts['cpuinfo']['processor0']['vendor_id'] ? {
+      'AuthenticAMD' => 'kvm_amd',
+      'GenuineIntel' => 'kvm_intel',
+      default        => fail('libvirt: Unknown CPU vendor_id')
+    }
 
-  if $facts['operatingsystem'] in ['RedHat', 'CentOS'] {
-    $package_list = $facts['operatingsystemmajrelease'] ? {
-      '7' => [
-        'ipxe-roms',
-        'ipxe-roms-qemu',
-        'qemu-kvm',
-        'qemu-kvm-tools',
-        'qemu-img',
-        'libsndfile'
-      ],
-      default => [
-        'gpxe-roms',
-        'gpxe-roms-qemu',
-        'qemu-kvm',
-        'qemu-kvm-tools',
-        'qemu-img',
-        'virt-v2v',
-        'libsndfile'
-      ]
+    kmod::load { $_kvm_kmod:
+      before => Package[$package_list]
     }
   }
-  else {
-    warning("${facts['operatingsystem']} not yet supported. Current options are RedHat and CentOS")
-  }
-  package { $package_list:
-    ensure => 'latest',
-    notify => Exec['kvm_mod_check']
-  }
 
-  # Enable Forwarding
-  sysctl { 'net.ipv4.conf.all.forwarding':
-    ensure => 'present',
-    val    => '1'
-  }
-  sysctl { 'net.ipv4.ip_forward':
-    ensure => 'present',
-    val    => '1'
-  }
+  if $manage_sysctl {
+    sysctl {
+      default: ensure => 'present';
 
-  # Bypass the base hosts's IPTables
-  sysctl { 'net.bridge.bridge-nf-call-arptables':
-    ensure => 'present',
-    val    => '0'
-  }
-  sysctl { 'net.bridge.bridge-nf-call-iptables':
-    ensure => 'present',
-    val    => '0'
-  }
-
-  # TODO: Make native boolean when we use facter 2.0
-  if $facts['ipv6_enabled'] == true {
-    sysctl { 'net.bridge.bridge-nf-call-ip6tables':
-      ensure => 'present',
-      val    => '0'
+      # Enable Forwarding
+      'net.ipv4.conf.all.forwarding': value => '1';
+      'net.ipv4.ip_forward':          value => '1';
     }
-  }
-  else {
-    sysctl { 'net.bridge.bridge-nf-call-ip6tables':
-      ensure => 'absent'
+
+    unless $facts['libvirt_br_netfilter_loaded'] {
+      if $load_kernel_modules {
+        kmod::load { 'br_netfilter': }
+
+        Kmod::Load['br_netfilter'] -> Sysctl['net.bridge.bridge-nf-call-arptables']
+        Kmod::Load['br_netfilter'] -> Sysctl['net.bridge.bridge-nf-call-iptables']
+
+        if $facts['ipv6_enabled'] {
+          Kmod::Load['br_netfilter'] -> Sysctl['net.bridge.bridge-nf-call-ip6tables']
+        }
+      }
+    }
+
+    sysctl {
+      default: ensure => 'present';
+
+      # Bypass the base hosts's IPTables
+      'net.bridge.bridge-nf-call-arptables': value => '0';
+      'net.bridge.bridge-nf-call-iptables':  value => '0';
+    }
+
+    if $facts['ipv6_enabled'] {
+      sysctl { 'net.bridge.bridge-nf-call-ip6tables':
+        ensure => 'present',
+        value  => '0'
+      }
+    }
+    else {
+      sysctl { 'net.bridge.bridge-nf-call-ip6tables':
+        ensure => 'absent'
+      }
     }
   }
 }

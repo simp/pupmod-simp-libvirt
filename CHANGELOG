@@ -1,3 +1,20 @@
+* Mon Dec 04 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 5.1.0-0
+- Added a `libvirt_br_netfilter_loaded` fact to determine if the `br_netfilter`
+  kernel module is loaded on the target system
+- Documentation update
+- Data in modules update
+- Use `ensure_packages` for package installation
+- Fully decouple `libvirt::ksm` from the main `libvirt` class
+
+* Thu Nov 02 2017 Nick Miller <nick.miller@onyxpoint.com> - 5.1.0-0
+- Use kmod::load instead of ruby script for loading the kernel module
+- Modernize some code
+  - Moved all parameters to init.pp while also
+    maintaining previous functionality
+- Spec test cleanup
+- New acceptance test (no nested virtualization)
+- Corrected some documentation and examples
+
 * Thu Sep 28 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 5.0.4-0
 - Convert to using the simplib_sysctl kernel.shmall fact
 

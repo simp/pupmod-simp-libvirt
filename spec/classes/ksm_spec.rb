@@ -4,17 +4,19 @@ describe 'libvirt::ksm' do
   context 'supported operating systems' do
     on_supported_os.each do |os, os_facts|
       context "on #{os}" do
-        let(:facts) { os_facts.merge({
-          :simplib_sysctl => {
+        let(:facts) { os_facts.merge(
+          simplib_sysctl: {
             'kernel.shmall' => '18446744073692774399'
           }
-        })}
+        )}
 
         let(:params) {{
-          :ksm_max_kernel_pages => 40,
-          :ksm_monitor_interval => 60
+          ksm_max_kernel_pages: 40,
+          ksm_monitor_interval: 60
         }}
+        let(:precondition) { "include 'libvirt'" }
 
+        it { is_expected.to compile.with_all_deps }
         it { is_expected.to create_class('libvirt::ksm') }
         it { is_expected.to create_file('/etc/ksmtuned.conf').with_content(/KSM_MONITOR_INTERVAL=60/) }
 

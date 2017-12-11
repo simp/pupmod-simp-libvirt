@@ -1,23 +1,24 @@
-# The options in the vm_create() define use the exact same field syntax as
+# The options in the ``vm()`` define use the exact same field syntax as
 # the virt-install command.
 #
-# See virt-install(1) for variable details.
+# See ``virt-install(1)`` for variable details.
 #
-# If virbr0 doesn't do what you need it to, you may need to set up your own
+# If ``virbr0`` doesn't do what you need it to, you may need to set up your own
 # bridge using the networking module.
+#
 # If you do set up your own bridge, make sure your call of this define
 # 'require's that network stanza.
 #
 # @example
-#  libvirt::vm_create { 'test_system':
-#     mac_addr => 'AA:BB:CC:DD:EE:FF',
-#     size => '20',
-#     networks => { 'type' => 'bridge', target =>  'br0' },
-#     pxe => true,
+#  libvirt::vm { 'test_system':
+#     mac_addr  => 'AA:BB:CC:DD:EE:FF',
+#     size      => 20,
+#     networks  => { 'type' => 'bridge', target =>  'br0' },
+#     pxe       => true,
 #     disk_opts => { 'bus' => 'virtio' }
 #  }
 #
-# @param name
+# @attr name
 #   Used to name the /usr/sbin/vm-create script
 #   No '/' in the name!
 #
@@ -42,16 +43,16 @@
 #   Example:
 #     [
 #       {
-#         'type'    => 'bridge',
-#         'target'  => '<bridge>',
-#         'mac'     => '<macaddr>', # Optional
-#         'model'   => '<model>', # Optional
+#         'type'   => 'bridge',
+#         'target' => '<bridge>',
+#         'mac'    => '<macaddr>', # Optional
+#         'model'  => '<model>',   # Optional
 #       },
 #       {
-#         'type'    => 'network'
-#         'target'  => '<network1>',
-#         'mac'     => '<macaddr>', # Optional
-#         'model'   => '<model>', # Optional
+#         'type'   => 'network'
+#         'target' => '<network1>',
+#         'mac'    => '<macaddr>', # Optional
+#         'model'  => '<model>',   # Optional
 #       }
 #     ]
 #
@@ -70,10 +71,10 @@
 # @param cpu
 #   A hash of the 'cpu' options:
 #     {
-#       'name'      => '<cpu_name>',
-#       'features'  => ['+<feature>','-<feature>','disable=<feature>']
-#       'match'     => <match>
-#       'vendor'    => <vendor>
+#       'name'     => '<cpu_name>',
+#       'features' => ['+<feature>','-<feature>','disable=<feature>']
+#       'match'    => <match>
+#       'vendor'   => <vendor>
 #     }
 #
 # @param description
@@ -114,13 +115,13 @@
 #
 #   Example:
 #   {
-#     'type'              => 'vnc',
-#     'port'              => <port>                     #optional
-#     'tlsport'           => <spice tls port>           #optional
-#     'listen'            => <listen address>           #optional
-#     'keymap'            => <virtual keymap>           #optional
-#     'password'          => <password>                 #optional
-#     'passwordvalidto'  => <expire date for password> #optional
+#     'type'            => 'vnc',
+#     'port'            => <port>                     #optional
+#     'tlsport'         => <spice tls port>           #optional
+#     'listen'          => <listen address>           #optional
+#     'keymap'          => <virtual keymap>           #optional
+#     'password'        => <password>                 #optional
+#     'passwordvalidto' => <expire date for password> #optional
 #   }
 #
 # @param virt_type
@@ -129,7 +130,7 @@
 #   A hash of options to pass to the watchdog option of virt-install.
 #   Options are 'model', and 'action'(optional)
 #
-# @author Trevor Vaughan <tvaughan@onyxpoint.com>
+# @author https://github.com/simp/pupmod-simp-libvirt/graphs/contributors
 #
 define libvirt::vm (
   Integer              $size,

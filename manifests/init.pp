@@ -1,31 +1,52 @@
-# Set up libvirt.  Install the necessary packages and make sure libvirtd is
-# running.
+# Install the necessary packages and make sure ``libvirtd`` is running
 #
-# The easiest way to obtain all package dependencies for libvirt is to
-# unpack the distribution ISO that corresponds with your flavor of SIMP.
-# SIMP provides a utility for exactly that, `/usr/local/bin/unpack_dvd`
+# @param package_list
+#   List of packages related to libvirt to be managed
 #
-# @author Trevor Vaughan <tvaughan@onyxpoint.com>
+# @param service_ensure
+#   ``ensure`` setting for libvirtd
 #
-class libvirt {
+# @param ksm
+#   Manage Kernel Shared Memory
+#
+# @param kvm
+#   Manage ``kvm``
+#
+# @param load_kernel_modules
+#   Manage kernel modules from this module
+#
+# @param manage_sysctl
+#   Manage associated sysctl settings from this module
+#
+# @param package_ensure
+#   Ensure setting for all packages in this module
+#
+# @author https://github.com/simp/pupmod-simp-libvirt/graphs/contributors
+#
+class libvirt (
+  Array[String]  $package_list        = [
+    'virt-viewer'
+  ],
+  String         $service_ensure      = running,
+  Boolean        $ksm                 = false,
+  Boolean        $kvm                 = true,
+  Boolean        $load_kernel_modules = true,
+  Boolean        $manage_sysctl       = true,
+  String         $package_ensure      = simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' })
+) {
 
-  if $facts['operatingsystem'] in ['RedHat', 'CentOS'] {
-    $package_list = $facts['operatingsystemmajrelease'] ? {
-      '7'     => ['libvirt', 'virt-viewer', 'virt-install'],
-      default => ['libvirt', 'virt-viewer', 'python-virtinst']
-    }
-  }
-  else {
-    warning("${facts['operatingsystem']} not yet supported. Current supported options are RedHat and CentOS.")
-  }
+  ensure_packages( $package_list, { ensure => $package_ensure } )
 
-  package { $package_list: ensure => 'latest' }
+  if $kvm { include 'libvirt::kvm' }
+  if $ksm { include 'libvirt::ksm' }
+
+  package { 'libvirt':
+    ensure => $package_ensure
+  }
 
   service { 'libvirtd':
-    ensure     => 'running',
-    enable     => true,
-    hasstatus  => true,
-    hasrestart => true,
-    require    => Package['libvirt']
+    ensure    => $service_ensure,
+    enable    => true,
+    subscribe => Package['libvirt']
   }
 }
