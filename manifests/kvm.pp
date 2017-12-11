@@ -25,8 +25,8 @@ class libvirt::kvm (
 
   if $load_kernel_modules {
     $_kvm_kmod = $facts['cpuinfo']['processor0']['vendor_id'] ? {
-      'AuthenticAMD' => 'kvm-amd',
-      'GenuineIntel' => 'kvm-intel',
+      'AuthenticAMD' => 'kvm_amd',
+      'GenuineIntel' => 'kvm_intel',
       default        => fail('libvirt: Unknown CPU vendor_id')
     }
 
