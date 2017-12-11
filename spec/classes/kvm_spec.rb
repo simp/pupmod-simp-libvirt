@@ -56,7 +56,7 @@ describe 'libvirt::kvm' do
                 cpuinfo: { 'processor0' => { 'vendor_id' => 'AuthenticAMD' } }
               )
             }
-            it { is_expected.to contain_kmod__load('kvm-amd') }
+            it { is_expected.to contain_kmod__load('kvm_amd') }
           end
         end
       end
