@@ -97,8 +97,8 @@ class libvirt::ksm (
   $_ensure = $enable ? { true => 'running', false => undef }
 
   service { 'ksmtuned':
-    ensure  => $_ensure,
-    enable  => $enable
+    ensure => $_ensure,
+    enable => $enable
   }
 
   file { '/etc/sysconfig/ksm':

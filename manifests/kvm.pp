@@ -16,9 +16,9 @@ class libvirt::kvm (
     'qemu-kvm',
     'qemu-kvm-tools'
   ],
- $package_ensure      = $::libvirt::package_ensure,
- $manage_sysctl       = $::libvirt::manage_sysctl,
- $load_kernel_modules = $::libvirt::load_kernel_modules
+  $package_ensure      = $::libvirt::package_ensure,
+  $manage_sysctl       = $::libvirt::manage_sysctl,
+  $load_kernel_modules = $::libvirt::load_kernel_modules
 ) inherits libvirt {
 
   ensure_packages($package_list, { ensure => $package_ensure } )

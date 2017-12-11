@@ -45,8 +45,8 @@ class libvirt (
   }
 
   service { 'libvirtd':
-    ensure     => $service_ensure,
-    enable     => true,
-    subscribe  => Package['libvirt']
+    ensure    => $service_ensure,
+    enable    => true,
+    subscribe => Package['libvirt']
   }
 }
