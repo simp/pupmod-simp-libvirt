@@ -5,6 +5,7 @@
 - Data in modules update
 - Use `ensure_packages` for package installation
 - Fully decouple `libvirt::ksm` from the main `libvirt` class
+- Add support for Puppet 5 and OEL
 
 * Thu Nov 02 2017 Nick Miller <nick.miller@onyxpoint.com> - 5.1.0-0
 - Use kmod::load instead of ruby script for loading the kernel module

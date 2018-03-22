@@ -35,6 +35,8 @@ class libvirt (
   String         $package_ensure      = simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' })
 ) {
 
+  simplib::assert_metadata($module_name)
+
   ensure_packages( $package_list, { ensure => $package_ensure } )
 
   if $kvm { include 'libvirt::kvm' }
