@@ -193,7 +193,7 @@ define libvirt::vm (
     require => File[$target_dir]
   }
 
-  if $facts['operatingsystem'] in ['RedHat','CentOS'] {
+  if $facts['operatingsystem'] in ['RedHat','CentOS','OracleLinux'] {
     $exec_deps = $facts['operatingsystemmajrelease'] ? {
       '7' => [
         File["/usr/local/sbin/vm-create-${name}.sh"],
@@ -206,9 +206,6 @@ define libvirt::vm (
         Service['libvirtd']
       ]
     }
-  }
-  else {
-    warning("${facts['operatingsystem']} not yet supported. Current options are RedHat and CentOS.")
   }
 
   exec { "vm-create-${name}":
