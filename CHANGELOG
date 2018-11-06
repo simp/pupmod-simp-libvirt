@@ -1,5 +1,6 @@
 * Fri Sep 07 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 5.2.0-0
 - Update Hiera 4 to Hiera 5
+- Update badges and contribution guide URL in README.md
 
 * Tue Jun 26 2018 Nick Miller <nick.miller@onyxpoint.com> - 5.2.0-0
 - Update CI assets
