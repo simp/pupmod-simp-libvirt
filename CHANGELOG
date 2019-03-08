@@ -1,3 +1,9 @@
+* Thu Mar 07 2019 Liz Nemsick <lnemsick.simp@gmail.com> - 5.2.1-0
+- Update the upper bound of stdlib to < 6.0.0
+- Workaround a change in behavior of ensure_packages with stdlib 5.x.
+  This change caused resource conflicts.
+- Update a URL in the README.md
+
 * Fri Sep 07 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 5.2.0-0
 - Update Hiera 4 to Hiera 5
 - Update badges and contribution guide URL in README.md

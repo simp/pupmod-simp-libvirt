@@ -79,12 +79,9 @@ class libvirt::ksm (
   Optional[Integer]               $ksm_thres_const      = undef
 ) {
 
-  ensure_packages( $package_list,
-    {
-      'ensure' => $package_ensure,
-      'notify' => [ Service['ksmtuned'], Service['ksm'] ]
-    }
-  )
+  ensure_packages( $package_list, { 'ensure' => $package_ensure, } )
+
+  $package_list.each |String $pkg|  { Package[$pkg] ~> [ Service['ksmtuned'], Service['ksm'] ] }
 
   file { '/etc/ksmtuned.conf':
     owner   => 'root',

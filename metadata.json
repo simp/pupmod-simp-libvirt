@@ -1,6 +1,6 @@
 {
   "name": "simp-libvirt",
-  "version": "5.2.0",
+  "version": "5.2.1",
   "author": "SIMP Team",
   "summary": "manages libvirtd in a SIMP-compatible environment",
   "license": "Apache-2.0",
@@ -20,7 +20,7 @@
     },
     {
       "name": "puppetlabs/stdlib",
-      "version_requirement": ">= 4.13.1 < 5.0.0"
+      "version_requirement": ">= 4.13.1 < 6.0.0"
     },
     {
       "name": "simp/polkit",
