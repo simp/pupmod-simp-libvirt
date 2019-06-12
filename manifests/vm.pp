@@ -209,7 +209,7 @@ define libvirt::vm (
   }
 
   exec { "vm-create-${name}":
-    command => "/usr/local/sbin/vm-create-${name}.sh &",
+    command => "/usr/local/sbin/vm-create-${name}.sh > /dev/null 2>&1&",
     onlyif  => "/usr/bin/virsh domstate ${name}; /usr/bin/test \$? -ne 0",
     require => $exec_deps
   }

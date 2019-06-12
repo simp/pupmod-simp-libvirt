@@ -1,3 +1,6 @@
+* Weds Jun 12 2019 judy johnson <judyfinkjohnson@gmail.com> - 5.2.2-0
+- Fixed the exec to reroute output to /dev/null so that vm_create works
+
 * Thu Mar 07 2019 Liz Nemsick <lnemsick.simp@gmail.com> - 5.2.1-0
 - Update the upper bound of stdlib to < 6.0.0
 - Workaround a change in behavior of ensure_packages with stdlib 5.x.
