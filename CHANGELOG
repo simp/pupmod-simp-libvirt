@@ -1,3 +1,6 @@
+* Fri Aug 02 2019 Robert Vincent <pillarsdotnet@gmail.com> - 5.2.3-0
+- Support puppetlabs/stdlib 6.x and puppet 6.x.
+
 * Wed Jun 12 2019 judy johnson <judyfinkjohnson@gmail.com> - 5.2.2-0
 - Fixed the exec to reroute output to /dev/null so that vm_create works
 - Dropped Puppet 4 support
