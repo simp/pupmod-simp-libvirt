@@ -37,18 +37,21 @@ class libvirt (
 
   simplib::assert_metadata($module_name)
 
-  ensure_packages( $package_list, { ensure => $package_ensure } )
+  include 'libvirt::install'
+  include 'libvirt::service'
 
-  if $kvm { include 'libvirt::kvm' }
-  if $ksm { include 'libvirt::ksm' }
+  Class['Libvirt::Install'] ~> Class['Libvirt::Service']
 
-  package { 'libvirt':
-    ensure => $package_ensure
+  if $kvm {
+    include 'libvirt::kvm'
+
+    Class['Libvirt::Install'] -> Class['Libvirt::Kvm']
+    Class['Libvirt::Kvm'] ~> Class['Libvirt::Service']
   }
 
-  service { 'libvirtd':
-    ensure    => $service_ensure,
-    enable    => true,
-    subscribe => Package['libvirt']
+  if $ksm {
+    include 'libvirt::ksm'
+
+    Class['Libvirt::Ksm'] ~> Class['Libvirt::Service']
   }
 }

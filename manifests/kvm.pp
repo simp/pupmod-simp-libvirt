@@ -3,6 +3,8 @@
 # @param package_list
 #   List of packages to be managed for KVM
 #
+#   * Defaults in module data
+#
 # @param package_ensure
 # @param manage_sysctl
 # @param load_kernel_modules
@@ -10,12 +12,7 @@
 # @author https://github.com/simp/pupmod-simp-libvirt/graphs/contributors
 #
 class libvirt::kvm (
-  $package_list       = [
-    'libsndfile',
-    'qemu-img',
-    'qemu-kvm',
-    'qemu-kvm-tools'
-  ],
+  $package_list,
   $package_ensure      = $::libvirt::package_ensure,
   $manage_sysctl       = $::libvirt::manage_sysctl,
   $load_kernel_modules = $::libvirt::load_kernel_modules

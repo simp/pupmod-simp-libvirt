@@ -4,7 +4,12 @@ lookup_options:
     merge:
       strategy: deep
       knockout_prefix: --
-  libvirt::kvm_package_list:
+  libvirt::kvm::package_list:
     merge:
       strategy: deep
       knockout_prefix: --
+
+libvirt::kvm::package_list:
+  - libsndfile
+  - qemu-img
+  - qemu-kvm

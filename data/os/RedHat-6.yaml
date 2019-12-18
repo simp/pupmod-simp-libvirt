@@ -3,7 +3,8 @@
 libvirt::package_list:
 - python-virtinst
 
-libvirt::kvm_package_list:
+libvirt::kvm::package_list:
+- qemu-kvm-tools
 - gpxe-roms
 - gpxe-roms-qemu
 - virt-v2v
