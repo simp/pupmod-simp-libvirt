@@ -13,7 +13,7 @@
 #  libvirt::vm { 'test_system':
 #     mac_addr  => 'AA:BB:CC:DD:EE:FF',
 #     size      => 20,
-#     networks  => { 'type' => 'bridge', target =>  'br0' },
+#     networks  => { 'type' => 'bridge', 'target' =>  'br0' },
 #     pxe       => true,
 #     disk_opts => { 'bus' => 'virtio' }
 #  }
@@ -167,8 +167,7 @@ define libvirt::vm (
   Optional[String]     $host_device  = undef,
   Hash                 $watchdog     = { 'model' => 'default' }
 ) {
-
-  include 'libvirt'
+  include 'libvirt::kvm'
 
   if !defined(File[$target_dir]) {
     exec { "make ${target_dir}":
@@ -193,24 +192,9 @@ define libvirt::vm (
     require => File[$target_dir]
   }
 
-  if $facts['operatingsystem'] in ['RedHat','CentOS','OracleLinux'] {
-    $exec_deps = $facts['operatingsystemmajrelease'] ? {
-      '7' => [
-        File["/usr/local/sbin/vm-create-${name}.sh"],
-        Package['virt-install'],
-        Service['libvirtd']
-      ],
-      default => [
-        File["/usr/local/sbin/vm-create-${name}.sh"],
-        Package['python-virtinst'],
-        Service['libvirtd']
-      ]
-    }
-  }
-
   exec { "vm-create-${name}":
     command => "/usr/local/sbin/vm-create-${name}.sh > /dev/null 2>&1 &",
     onlyif  => "/usr/bin/virsh domstate ${name}; /usr/bin/test \$? -ne 0",
-    require => $exec_deps
+    require => Class['Libvirt::Service']
   }
 }

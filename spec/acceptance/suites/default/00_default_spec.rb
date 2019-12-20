@@ -65,6 +65,20 @@ describe 'libvirt' do
           result = on(host, 'sysctl -n net.bridge.bridge-nf-call-arptables').output.strip
           expect(result).to be == '1'
         end
+
+        it 'should be able to spin up a VM' do
+          vm_manifest = <<-EOF
+            include libvirt
+
+            libvirt::vm { 'test':
+              mac_addr  => '00:16:3e:aa:bb:cc',
+              'size'    => 5,
+              disk_opts => { 'bus' => 'virtiio' }
+            }
+          EOF
+
+          apply_manifest_on(host, vm_manifest)
+        end
       else
         it "#{host} does not have virtualization support for advanced tests"
       end

@@ -6,7 +6,6 @@ libvirt::package_list:
 libvirt::kvm::package_list:
 - ipxe-roms
 - ipxe-roms-qemu
-- qemu-kvm-tools
 
 libvirt::ksm::package_list:
   - qemu-kvm-common
