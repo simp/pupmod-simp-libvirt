@@ -52,7 +52,7 @@ describe 'libvirt' do
 
       it 'should have ksm enabled' do
         result = on(host, 'puppet resource service ksm').output
-        expect(result).to match(/enable =>.*true/)
+        expect(result).to match(/enable\s*=>\s*['"]?true['"]?/)
       end
 
       it 'should be able to use virsh' do
