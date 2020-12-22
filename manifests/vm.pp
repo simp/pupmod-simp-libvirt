@@ -11,11 +11,11 @@
 #
 # @example
 #  libvirt::vm { 'test_system':
-#     mac_addr  => 'AA:BB:CC:DD:EE:FF',
-#     size      => 20,
-#     networks  => { 'type' => 'bridge', 'target' =>  'br0' },
-#     pxe       => true,
-#     disk_opts => { 'bus' => 'virtio' }
+#     mac_addr          => 'AA:BB:CC:DD:EE:FF',
+#     size              => 20,
+#     networks          => { 'type' => 'bridge', 'target' =>  'br0' },
+#     pxe               => true,
+#     disk_opts         => { 'bus' => 'virtio' }
 #  }
 #
 # @attr name
@@ -30,6 +30,9 @@
 # @param machine
 # @param ostype
 # @param osvariant
+#   Optimize the guest configuration for a specific operating system (ex.
+#   'fedora18', 'rhel7', 'winxp').  See `man virt-install` for more information.
+#
 # @param bridge
 #   A legacy option for connecting to a single bridge. '$bridges' is now the
 #   favored option.
@@ -43,16 +46,16 @@
 #   Example:
 #     [
 #       {
-#         'type'   => 'bridge',
-#         'target' => '<bridge>',
-#         'mac'    => '<macaddr>', # Optional
-#         'model'  => '<model>',   # Optional
+#         'type'        => 'bridge',
+#         'target'      => '<bridge>',
+#         'mac'         => '<macaddr>', # Optional
+#         'model'       => '<model>',   # Optional
 #       },
 #       {
-#         'type'   => 'network'
-#         'target' => '<network1>',
-#         'mac'    => '<macaddr>', # Optional
-#         'model'  => '<model>',   # Optional
+#         'type'        => 'network'
+#         'target'      => '<network1>',
+#         'mac'         => '<macaddr>', # Optional
+#         'model'       => '<model>',   # Optional
 #       }
 #     ]
 #
@@ -61,28 +64,28 @@
 #   A hash of options that match the vcpus extended arguments.
 #   Options will be passed directly and without translation.
 #   Example:
-#     { 'maxvcpus' => '3', 'sockets' => '2' }
+#     { 'maxvcpus'      => '3', 'sockets' => '2' }
 #
 # @param numatune
 #   A hash of options that correspond to the numatune options.
 #   Example:
-#     { 'nodeset' => '1,2,3', 'mode' => 'preferred' }
+#     { 'nodeset'       => '1,2,3', 'mode' => 'preferred' }
 #
 # @param cpu
 #   A hash of the 'cpu' options:
 #     {
-#       'name'     => '<cpu_name>',
-#       'features' => ['+<feature>','-<feature>','disable=<feature>']
-#       'match'    => <match>
-#       'vendor'   => <vendor>
+#       'name'          => '<cpu_name>',
+#       'features'      => ['+<feature>','-<feature>','disable=<feature>']
+#       'match'         => <match>
+#       'vendor'        => <vendor>
 #     }
 #
 # @param description
 # @param security
 #   A hash of the 'security' options:
 #     {
-#       'type'  => '<type>'
-#       'label' => '<label>'
+#       'type'          => '<type>'
+#       'label'         => '<label>'
 #     }
 #
 # @param cpuset
@@ -140,7 +143,7 @@ define libvirt::vm (
   Optional[String]     $arch         = undef,
   Optional[String]     $machine      = undef,
   String               $ostype       = 'linux',
-  String               $osvariant    = 'rhel6',
+  String               $osvariant    = 'rhel7',
   String               $bridge       = 'virbr0',
   Optional[Array]      $networks     = undef,
   Integer              $vcpus        = 1,
