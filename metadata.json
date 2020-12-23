@@ -1,6 +1,6 @@
 {
   "name": "simp-libvirt",
-  "version": "5.3.0",
+  "version": "5.3.1",
   "author": "SIMP Team",
   "summary": "manages libvirtd in a SIMP-compatible environment",
   "license": "Apache-2.0",
@@ -39,7 +39,6 @@
     {
       "operatingsystem": "CentOS",
       "operatingsystemrelease": [
-        "6",
         "7",
         "8"
       ]
@@ -47,7 +46,6 @@
     {
       "operatingsystem": "RedHat",
       "operatingsystemrelease": [
-        "6",
         "7",
         "8"
       ]
@@ -55,7 +53,6 @@
     {
       "operatingsystem": "OracleLinux",
       "operatingsystemrelease": [
-        "6",
         "7",
         "8"
       ]
