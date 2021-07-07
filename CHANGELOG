@@ -1,3 +1,6 @@
+* Wed Jul 07 2021 Trevor Vaughan <tvaughan@onyxpoint.com> - 5.4.0
+- Removed ipxe-roms from the OEL package lists since they are now in 'optional'
+
 * Tue Jun 15 2021 Chris Tessmer <chris.tessmer@onyxpoint.com> - 5.4.0
 - Removed support for Puppet 5
 - Ensured support for Puppet 7 in requirements and stdlib
