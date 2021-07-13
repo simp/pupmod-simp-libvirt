@@ -3,7 +3,7 @@ fixtures:
   repositories:
     augeasproviders_core: https://github.com/simp/augeasproviders_core.git
     augeasproviders_sysctl: https://github.com/simp/augeasproviders_sysctl.git
-    kmod: https://github.com/simp/puppet-kmod.git
+    kmod: https://github.com/simp/pupmod-voxpupuli-kmod.git
     polkit: https://github.com/simp/pupmod-simp-polkit.git
     simplib: https://github.com/simp/pupmod-simp-simplib.git
     stdlib: https://github.com/simp/puppetlabs-stdlib.git

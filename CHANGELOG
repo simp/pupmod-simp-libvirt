@@ -1,3 +1,6 @@
+* Tue Jul 13 2021 Trevor Vaughan <tvaughan@onyxpoint.com> - 5.5.0
+- Migrate to puppet/kmod
+
 * Wed Jul 07 2021 Trevor Vaughan <tvaughan@onyxpoint.com> - 5.4.0
 - Removed ipxe-roms from the OEL package lists since they are now in 'optional'
 
