@@ -10,7 +10,7 @@ class libvirt::service (
   simplib::assert_metadata($module_name)
 
   service { 'libvirtd':
-    ensure    => $service_ensure,
-    enable    => true
+    ensure => $service_ensure,
+    enable => true
   }
 }
