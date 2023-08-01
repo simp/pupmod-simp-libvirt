@@ -7,37 +7,49 @@
 ### Classes
 
 * [`libvirt`](#libvirt): Install the necessary packages and make sure ``libvirtd`` is running
-* [`libvirt::install`](#libvirtinstall): Install the necessary packages
-* [`libvirt::ksm`](#libvirtksm): A class to configure Kernel Shared Memory components.  This isn't strictly tied to ``libvirt``, but it's included in the qemu-kvm package so 
-* [`libvirt::kvm`](#libvirtkvm): Set up libvirt to use KVM
-* [`libvirt::polkit`](#libvirtpolkit): Add a rule file allowing members of a group to use libvirt
-* [`libvirt::service`](#libvirtservice): Make sure ``libvirtd`` is running
+* [`libvirt::install`](#libvirt--install): Install the necessary packages
+* [`libvirt::ksm`](#libvirt--ksm): A class to configure Kernel Shared Memory components.  This isn't strictly tied to ``libvirt``, but it's included in the qemu-kvm package so 
+* [`libvirt::kvm`](#libvirt--kvm): Set up libvirt to use KVM
+* [`libvirt::polkit`](#libvirt--polkit): Add a rule file allowing members of a group to use libvirt
+* [`libvirt::service`](#libvirt--service): Make sure ``libvirtd`` is running
 
 ### Defined types
 
-* [`libvirt::vm`](#libvirtvm): The options in the ``vm()`` define use the exact same field syntax as the virt-install command.  See ``virt-install(1)`` for variable details
+* [`libvirt::vm`](#libvirt--vm): The options in the ``vm()`` define use the exact same field syntax as the virt-install command.  See ``virt-install(1)`` for variable details
 
 ## Classes
 
-### `libvirt`
+### <a name="libvirt"></a>`libvirt`
 
 Install the necessary packages and make sure ``libvirtd`` is running
 
 #### Parameters
 
-The following parameters are available in the `libvirt` class.
+The following parameters are available in the `libvirt` class:
 
-##### `package_list`
+* [`package_list`](#-libvirt--package_list)
+* [`service_ensure`](#-libvirt--service_ensure)
+* [`ksm`](#-libvirt--ksm)
+* [`kvm`](#-libvirt--kvm)
+* [`load_kernel_modules`](#-libvirt--load_kernel_modules)
+* [`manage_sysctl`](#-libvirt--manage_sysctl)
+* [`package_ensure`](#-libvirt--package_ensure)
+
+##### <a name="-libvirt--package_list"></a>`package_list`
 
 Data type: `Array[String]`
 
 List of packages related to libvirt to be managed
 
-Default value: `[
-    'virt-viewer'
-  ]`
+Default value:
 
-##### `service_ensure`
+```puppet
+[
+    'virt-viewer'
+  ]
+```
+
+##### <a name="-libvirt--service_ensure"></a>`service_ensure`
 
 Data type: `String`
 
@@ -45,39 +57,39 @@ Data type: `String`
 
 Default value: `running`
 
-##### `ksm`
+##### <a name="-libvirt--ksm"></a>`ksm`
 
 Data type: `Boolean`
 
 Manage Kernel Shared Memory
 
-Default value: ``false``
+Default value: `false`
 
-##### `kvm`
+##### <a name="-libvirt--kvm"></a>`kvm`
 
 Data type: `Boolean`
 
 Manage ``kvm``
 
-Default value: ``true``
+Default value: `true`
 
-##### `load_kernel_modules`
+##### <a name="-libvirt--load_kernel_modules"></a>`load_kernel_modules`
 
 Data type: `Boolean`
 
 Manage kernel modules from this module
 
-Default value: ``true``
+Default value: `true`
 
-##### `manage_sysctl`
+##### <a name="-libvirt--manage_sysctl"></a>`manage_sysctl`
 
 Data type: `Boolean`
 
 Manage associated sysctl settings from this module
 
-Default value: ``true``
+Default value: `true`
 
-##### `package_ensure`
+##### <a name="-libvirt--package_ensure"></a>`package_ensure`
 
 Data type: `String`
 
@@ -85,15 +97,18 @@ Ensure setting for all packages in this module
 
 Default value: `simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' })`
 
-### `libvirt::install`
+### <a name="libvirt--install"></a>`libvirt::install`
 
 Install the necessary packages
 
 #### Parameters
 
-The following parameters are available in the `libvirt::install` class.
+The following parameters are available in the `libvirt::install` class:
 
-##### `package_list`
+* [`package_list`](#-libvirt--install--package_list)
+* [`package_ensure`](#-libvirt--install--package_ensure)
+
+##### <a name="-libvirt--install--package_list"></a>`package_list`
 
 Data type: `Array[String]`
 
@@ -101,7 +116,7 @@ List of packages related to libvirt to be managed
 
 Default value: `$libvirt::package_list`
 
-##### `package_ensure`
+##### <a name="-libvirt--install--package_ensure"></a>`package_ensure`
 
 Data type: `String`
 
@@ -109,7 +124,7 @@ Ensure setting for all packages in this module
 
 Default value: `$libvirt::package_ensure`
 
-### `libvirt::ksm`
+### <a name="libvirt--ksm"></a>`libvirt::ksm`
 
 A class to configure Kernel Shared Memory components.
 
@@ -121,16 +136,29 @@ from the configuration files.
 
 #### Parameters
 
-The following parameters are available in the `libvirt::ksm` class.
+The following parameters are available in the `libvirt::ksm` class:
 
-##### `package_list`
+* [`package_list`](#-libvirt--ksm--package_list)
+* [`package_ensure`](#-libvirt--ksm--package_ensure)
+* [`enable`](#-libvirt--ksm--enable)
+* [`ksm_max_kernel_pages`](#-libvirt--ksm--ksm_max_kernel_pages)
+* [`ksm_monitor_interval`](#-libvirt--ksm--ksm_monitor_interval)
+* [`ksm_sleep_msec`](#-libvirt--ksm--ksm_sleep_msec)
+* [`ksm_npages_boost`](#-libvirt--ksm--ksm_npages_boost)
+* [`ksm_npages_decay`](#-libvirt--ksm--ksm_npages_decay)
+* [`ksm_npages_min`](#-libvirt--ksm--ksm_npages_min)
+* [`ksm_npages_max`](#-libvirt--ksm--ksm_npages_max)
+* [`ksm_thres_coef`](#-libvirt--ksm--ksm_thres_coef)
+* [`ksm_thres_const`](#-libvirt--ksm--ksm_thres_const)
+
+##### <a name="-libvirt--ksm--package_list"></a>`package_list`
 
 Data type: `Array[String]`
 
 The list of required packages for this module.
 Source: **Data in Modules**
 
-##### `package_ensure`
+##### <a name="-libvirt--ksm--package_ensure"></a>`package_ensure`
 
 Data type: `String`
 
@@ -138,24 +166,24 @@ Data type: `String`
 
 Default value: `simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' })`
 
-##### `enable`
+##### <a name="-libvirt--ksm--enable"></a>`enable`
 
 Data type: `Boolean`
 
 Enable the ``ksm`` related sevices
 
-Default value: ``true``
+Default value: `true`
 
-##### `ksm_max_kernel_pages`
+##### <a name="-libvirt--ksm--ksm_max_kernel_pages"></a>`ksm_max_kernel_pages`
 
 Data type: `Optional[Integer]`
 
 The maximum number of unswappable kernel pages which may be allocated by
 ksm (0 for unlimited) If unset, defaults to half of total memory.
 
-Default value: ``undef``
+Default value: `undef`
 
-##### `ksm_monitor_interval`
+##### <a name="-libvirt--ksm--ksm_monitor_interval"></a>`ksm_monitor_interval`
 
 Data type: `Integer`
 
@@ -165,7 +193,7 @@ will search for duplicated pages based on free memory.
 
 Default value: `60`
 
-##### `ksm_sleep_msec`
+##### <a name="-libvirt--ksm--ksm_sleep_msec"></a>`ksm_sleep_msec`
 
 Data type: `Integer`
 
@@ -177,7 +205,7 @@ written to /sys/kernel/mm/ksm/sleep_millisecs
 
 Default value: `100`
 
-##### `ksm_npages_boost`
+##### <a name="-libvirt--ksm--ksm_npages_boost"></a>`ksm_npages_boost`
 
 Data type: `Integer`
 
@@ -187,7 +215,7 @@ ram < threshold (see KSM_THRES_* below)
 
 Default value: `3000`
 
-##### `ksm_npages_decay`
+##### <a name="-libvirt--ksm--ksm_npages_decay"></a>`ksm_npages_decay`
 
 Data type: `Integer[default,0]`
 
@@ -195,9 +223,9 @@ Amount to decrease the number of pages to scan The number of pages to be
 scanned will be decreased by KSM_NPAGES_DECAY when the amount of free ram
 >= threshold (see KSM_THRES_* below)
 
-Default value: `-`
+Default value: `-50`
 
-##### `ksm_npages_min`
+##### <a name="-libvirt--ksm--ksm_npages_min"></a>`ksm_npages_min`
 
 Data type: `Variant[Enum['shmall'],Integer]`
 
@@ -207,7 +235,7 @@ If this variable is set to 'shmall', then half of the value in
 
 Default value: `'shmall'`
 
-##### `ksm_npages_max`
+##### <a name="-libvirt--ksm--ksm_npages_max"></a>`ksm_npages_max`
 
 Data type: `Variant[Enum['shmall'],Integer]`
 
@@ -217,7 +245,7 @@ If this variable is set to 'shmall', then the value in
 
 Default value: `'shmall'`
 
-##### `ksm_thres_coef`
+##### <a name="-libvirt--ksm--ksm_thres_coef"></a>`ksm_thres_coef`
 
 Data type: `Integer`
 
@@ -227,7 +255,7 @@ results in a larger number wins.
 
 Default value: `10`
 
-##### `ksm_thres_const`
+##### <a name="-libvirt--ksm--ksm_thres_const"></a>`ksm_thres_const`
 
 Data type: `Optional[Integer]`
 
@@ -235,17 +263,22 @@ If free memory is less than this number KSM will be activated
 NOTE: Only KSM_THRES_CONST or KSM_THRES_COEF is actually used.  Whichever
 results in a larger number wins.
 
-Default value: ``undef``
+Default value: `undef`
 
-### `libvirt::kvm`
+### <a name="libvirt--kvm"></a>`libvirt::kvm`
 
 Set up libvirt to use KVM
 
 #### Parameters
 
-The following parameters are available in the `libvirt::kvm` class.
+The following parameters are available in the `libvirt::kvm` class:
 
-##### `package_list`
+* [`package_list`](#-libvirt--kvm--package_list)
+* [`package_ensure`](#-libvirt--kvm--package_ensure)
+* [`manage_sysctl`](#-libvirt--kvm--manage_sysctl)
+* [`load_kernel_modules`](#-libvirt--kvm--load_kernel_modules)
+
+##### <a name="-libvirt--kvm--package_list"></a>`package_list`
 
 Data type: `Any`
 
@@ -253,7 +286,7 @@ List of packages to be managed for KVM
 
 * Defaults in module data
 
-##### `package_ensure`
+##### <a name="-libvirt--kvm--package_ensure"></a>`package_ensure`
 
 Data type: `Any`
 
@@ -261,7 +294,7 @@ Data type: `Any`
 
 Default value: `$::libvirt::package_ensure`
 
-##### `manage_sysctl`
+##### <a name="-libvirt--kvm--manage_sysctl"></a>`manage_sysctl`
 
 Data type: `Any`
 
@@ -269,7 +302,7 @@ Data type: `Any`
 
 Default value: `$::libvirt::manage_sysctl`
 
-##### `load_kernel_modules`
+##### <a name="-libvirt--kvm--load_kernel_modules"></a>`load_kernel_modules`
 
 Data type: `Any`
 
@@ -277,15 +310,22 @@ Data type: `Any`
 
 Default value: `$::libvirt::load_kernel_modules`
 
-### `libvirt::polkit`
+### <a name="libvirt--polkit"></a>`libvirt::polkit`
 
 Add a rule file allowing members of a group to use libvirt
 
 #### Parameters
 
-The following parameters are available in the `libvirt::polkit` class.
+The following parameters are available in the `libvirt::polkit` class:
 
-##### `ensure`
+* [`ensure`](#-libvirt--polkit--ensure)
+* [`group`](#-libvirt--polkit--group)
+* [`priority`](#-libvirt--polkit--priority)
+* [`result`](#-libvirt--polkit--result)
+* [`local`](#-libvirt--polkit--local)
+* [`active`](#-libvirt--polkit--active)
+
+##### <a name="-libvirt--polkit--ensure"></a>`ensure`
 
 Data type: `Enum['present','absent']`
 
@@ -293,7 +333,7 @@ Create or destroy the rules file
 
 Default value: `'present'`
 
-##### `group`
+##### <a name="-libvirt--polkit--group"></a>`group`
 
 Data type: `Variant[String,Array[String]]`
 
@@ -301,7 +341,7 @@ The group that membership is checked against
 
 Default value: `'virtusers'`
 
-##### `priority`
+##### <a name="-libvirt--polkit--priority"></a>`priority`
 
 Data type: `Integer[0,99]`
 
@@ -309,7 +349,7 @@ Priority of the file to be created
 
 Default value: `10`
 
-##### `result`
+##### <a name="-libvirt--polkit--result"></a>`result`
 
 Data type: `Polkit::Result`
 
@@ -317,31 +357,33 @@ Deny of approve access
 
 Default value: `'yes'`
 
-##### `local`
+##### <a name="-libvirt--polkit--local"></a>`local`
 
 Data type: `Boolean`
 
 Require users to be at a local seat
 
-Default value: ``true``
+Default value: `true`
 
-##### `active`
+##### <a name="-libvirt--polkit--active"></a>`active`
 
 Data type: `Boolean`
 
 Require users to have an active session
 
-Default value: ``true``
+Default value: `true`
 
-### `libvirt::service`
+### <a name="libvirt--service"></a>`libvirt::service`
 
 Make sure ``libvirtd`` is running
 
 #### Parameters
 
-The following parameters are available in the `libvirt::service` class.
+The following parameters are available in the `libvirt::service` class:
 
-##### `service_ensure`
+* [`service_ensure`](#-libvirt--service--service_ensure)
+
+##### <a name="-libvirt--service--service_ensure"></a>`service_ensure`
 
 Data type: `String`
 
@@ -351,7 +393,7 @@ Default value: `$libvirt::service_ensure`
 
 ## Defined types
 
-### `libvirt::vm`
+### <a name="libvirt--vm"></a>`libvirt::vm`
 
 The options in the ``vm()`` define use the exact same field syntax as
 the virt-install command.
@@ -380,31 +422,65 @@ libvirt::vm { 'test_system':
 
 #### Parameters
 
-The following parameters are available in the `libvirt::vm` defined type.
+The following parameters are available in the `libvirt::vm` defined type:
 
-##### `size`
+* [`size`](#-libvirt--vm--size)
+* [`mac_addr`](#-libvirt--vm--mac_addr)
+* [`sparse`](#-libvirt--vm--sparse)
+* [`mem`](#-libvirt--vm--mem)
+* [`arch`](#-libvirt--vm--arch)
+* [`machine`](#-libvirt--vm--machine)
+* [`ostype`](#-libvirt--vm--ostype)
+* [`osvariant`](#-libvirt--vm--osvariant)
+* [`bridge`](#-libvirt--vm--bridge)
+* [`networks`](#-libvirt--vm--networks)
+* [`vcpus`](#-libvirt--vm--vcpus)
+* [`vcpu_options`](#-libvirt--vm--vcpu_options)
+* [`numatune`](#-libvirt--vm--numatune)
+* [`cpu`](#-libvirt--vm--cpu)
+* [`description`](#-libvirt--vm--description)
+* [`security`](#-libvirt--vm--security)
+* [`cpuset`](#-libvirt--vm--cpuset)
+* [`full_virt`](#-libvirt--vm--full_virt)
+* [`accelerate`](#-libvirt--vm--accelerate)
+* [`sound`](#-libvirt--vm--sound)
+* [`noapic`](#-libvirt--vm--noapic)
+* [`noacpi`](#-libvirt--vm--noacpi)
+* [`pxe`](#-libvirt--vm--pxe)
+* [`cdrom_path`](#-libvirt--vm--cdrom_path)
+* [`location_url`](#-libvirt--vm--location_url)
+* [`ks_url`](#-libvirt--vm--ks_url)
+* [`target_dir`](#-libvirt--vm--target_dir)
+* [`disk_bus`](#-libvirt--vm--disk_bus)
+* [`disk_opts`](#-libvirt--vm--disk_opts)
+* [`graphics`](#-libvirt--vm--graphics)
+* [`virt_type`](#-libvirt--vm--virt_type)
+* [`host_device`](#-libvirt--vm--host_device)
+* [`watchdog`](#-libvirt--vm--watchdog)
+
+##### <a name="-libvirt--vm--size"></a>`size`
 
 Data type: `Integer`
 
 
 
-##### `mac_addr`
+##### <a name="-libvirt--vm--mac_addr"></a>`mac_addr`
 
 Data type: `Optional[String]`
 
 
 
-Default value: ``undef``
+Default value: `undef`
 
-##### `sparse`
+##### <a name="-libvirt--vm--sparse"></a>`sparse`
 
 Data type: `Boolean`
 
 
 
-Default value: ``false``
+Default value: `false`
 
-##### `mem`
+##### <a name="-libvirt--vm--mem"></a>`mem`
 
 Data type: `Integer`
 
@@ -412,23 +488,23 @@ Data type: `Integer`
 
 Default value: `512`
 
-##### `arch`
+##### <a name="-libvirt--vm--arch"></a>`arch`
 
 Data type: `Optional[String]`
 
 
 
-Default value: ``undef``
+Default value: `undef`
 
-##### `machine`
+##### <a name="-libvirt--vm--machine"></a>`machine`
 
 Data type: `Optional[String]`
 
 
 
-Default value: ``undef``
+Default value: `undef`
 
-##### `ostype`
+##### <a name="-libvirt--vm--ostype"></a>`ostype`
 
 Data type: `String`
 
@@ -436,7 +512,7 @@ Data type: `String`
 
 Default value: `'linux'`
 
-##### `osvariant`
+##### <a name="-libvirt--vm--osvariant"></a>`osvariant`
 
 Data type: `String`
 
@@ -445,7 +521,7 @@ Optimize the guest configuration for a specific operating system (ex.
 
 Default value: `'rhel7'`
 
-##### `bridge`
+##### <a name="-libvirt--vm--bridge"></a>`bridge`
 
 Data type: `String`
 
@@ -454,7 +530,7 @@ favored option.
 
 Default value: `'virbr0'`
 
-##### `networks`
+##### <a name="-libvirt--vm--networks"></a>`networks`
 
 Data type: `Optional[Array]`
 
@@ -479,9 +555,9 @@ Example:
     }
   ]
 
-Default value: ``undef``
+Default value: `undef`
 
-##### `vcpus`
+##### <a name="-libvirt--vm--vcpus"></a>`vcpus`
 
 Data type: `Integer`
 
@@ -489,7 +565,7 @@ Data type: `Integer`
 
 Default value: `1`
 
-##### `vcpu_options`
+##### <a name="-libvirt--vm--vcpu_options"></a>`vcpu_options`
 
 Data type: `Optional[Hash]`
 
@@ -498,9 +574,9 @@ Options will be passed directly and without translation.
 Example:
   { 'maxvcpus'      => '3', 'sockets' => '2' }
 
-Default value: ``undef``
+Default value: `undef`
 
-##### `numatune`
+##### <a name="-libvirt--vm--numatune"></a>`numatune`
 
 Data type: `Optional[Hash]`
 
@@ -508,9 +584,9 @@ A hash of options that correspond to the numatune options.
 Example:
   { 'nodeset'       => '1,2,3', 'mode' => 'preferred' }
 
-Default value: ``undef``
+Default value: `undef`
 
-##### `cpu`
+##### <a name="-libvirt--vm--cpu"></a>`cpu`
 
 Data type: `Optional[Hash]`
 
@@ -522,17 +598,17 @@ A hash of the 'cpu' options:
     'vendor'        => <vendor>
   }
 
-Default value: ``undef``
+Default value: `undef`
 
-##### `description`
+##### <a name="-libvirt--vm--description"></a>`description`
 
 Data type: `Optional[String]`
 
 
 
-Default value: ``undef``
+Default value: `undef`
 
-##### `security`
+##### <a name="-libvirt--vm--security"></a>`security`
 
 Data type: `Optional[Hash]`
 
@@ -542,90 +618,90 @@ A hash of the 'security' options:
     'label'         => '<label>'
   }
 
-Default value: ``undef``
+Default value: `undef`
 
-##### `cpuset`
-
-Data type: `Optional[String]`
-
-
-
-Default value: ``undef``
-
-##### `full_virt`
-
-Data type: `Boolean`
-
-
-
-Default value: ``true``
-
-##### `accelerate`
-
-Data type: `Boolean`
-
-
-
-Default value: ``true``
-
-##### `sound`
-
-Data type: `Boolean`
-
-
-
-Default value: ``true``
-
-##### `noapic`
-
-Data type: `Boolean`
-
-
-
-Default value: ``false``
-
-##### `noacpi`
-
-Data type: `Boolean`
-
-
-
-Default value: ``false``
-
-##### `pxe`
-
-Data type: `Boolean`
-
-
-
-Default value: ``false``
-
-##### `cdrom_path`
+##### <a name="-libvirt--vm--cpuset"></a>`cpuset`
 
 Data type: `Optional[String]`
 
 
 
-Default value: ``undef``
+Default value: `undef`
 
-##### `location_url`
+##### <a name="-libvirt--vm--full_virt"></a>`full_virt`
+
+Data type: `Boolean`
+
+
+
+Default value: `true`
+
+##### <a name="-libvirt--vm--accelerate"></a>`accelerate`
+
+Data type: `Boolean`
+
+
+
+Default value: `true`
+
+##### <a name="-libvirt--vm--sound"></a>`sound`
+
+Data type: `Boolean`
+
+
+
+Default value: `true`
+
+##### <a name="-libvirt--vm--noapic"></a>`noapic`
+
+Data type: `Boolean`
+
+
+
+Default value: `false`
+
+##### <a name="-libvirt--vm--noacpi"></a>`noacpi`
+
+Data type: `Boolean`
+
+
+
+Default value: `false`
+
+##### <a name="-libvirt--vm--pxe"></a>`pxe`
+
+Data type: `Boolean`
+
+
+
+Default value: `false`
+
+##### <a name="-libvirt--vm--cdrom_path"></a>`cdrom_path`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `undef`
+
+##### <a name="-libvirt--vm--location_url"></a>`location_url`
 
 Data type: `Optional[String]`
 
 This has been overloaded to accept DVD ISO image paths as well.
 If the target ends in '.iso' the correct option will be used.
 
-Default value: ``undef``
+Default value: `undef`
 
-##### `ks_url`
+##### <a name="-libvirt--vm--ks_url"></a>`ks_url`
 
 Data type: `Optional[String]`
 
 
 
-Default value: ``undef``
+Default value: `undef`
 
-##### `target_dir`
+##### <a name="-libvirt--vm--target_dir"></a>`target_dir`
 
 Data type: `Stdlib::AbsolutePath`
 
@@ -633,15 +709,15 @@ The directory in which to install the VM.
 
 Default value: `'/var/VM'`
 
-##### `disk_bus`
+##### <a name="-libvirt--vm--disk_bus"></a>`disk_bus`
 
 Data type: `Optional[String]`
 
 A legacy option now superseded by '$disk_opts'
 
-Default value: ``undef``
+Default value: `undef`
 
-##### `disk_opts`
+##### <a name="-libvirt--vm--disk_opts"></a>`disk_opts`
 
 Data type: `Optional[Hash]`
 
@@ -649,9 +725,9 @@ A hash of options as presented to the disk parameter of virt-install
 Supported options are:
 bus, perms, cache, format, io, error_policy, serial
 
-Default value: ``undef``
+Default value: `undef`
 
-##### `graphics`
+##### <a name="-libvirt--vm--graphics"></a>`graphics`
 
 Data type: `Hash`
 
@@ -671,23 +747,23 @@ Example:
 
 Default value: `{ 'type' => 'vnc', 'keymap' => 'en_us' }`
 
-##### `virt_type`
+##### <a name="-libvirt--vm--virt_type"></a>`virt_type`
 
 Data type: `Optional[String]`
 
 
 
-Default value: ``undef``
+Default value: `undef`
 
-##### `host_device`
+##### <a name="-libvirt--vm--host_device"></a>`host_device`
 
 Data type: `Optional[String]`
 
 
 
-Default value: ``undef``
+Default value: `undef`
 
-##### `watchdog`
+##### <a name="-libvirt--vm--watchdog"></a>`watchdog`
 
 Data type: `Hash`
 
