@@ -1,6 +1,6 @@
 {
   "name": "simp-libvirt",
-  "version": "5.7.0",
+  "version": "5.8.0",
   "author": "SIMP Team",
   "summary": "manages libvirtd in a SIMP-compatible environment",
   "license": "Apache-2.0",
@@ -16,7 +16,7 @@
   "dependencies": [
     {
       "name": "puppetlabs/stdlib",
-      "version_requirement": ">= 8.0.0 < 9.0.0"
+      "version_requirement": ">= 8.0.0 < 10.0.0"
     },
     {
       "name": "simp/polkit",
@@ -24,15 +24,15 @@
     },
     {
       "name": "simp/simplib",
-      "version_requirement": ">= 3.6.0 < 5.0.0"
+      "version_requirement": ">= 4.9.0 < 5.0.0"
     },
     {
-      "name": "herculesteam/augeasproviders_sysctl",
-      "version_requirement": ">= 2.1.0 < 3.0.0"
+      "name": "puppet/augeasproviders_sysctl",
+      "version_requirement": ">= 2.4.0 < 4.0.0"
     },
     {
       "name": "puppet/kmod",
-      "version_requirement": ">= 2.1.0 < 4.0.0"
+      "version_requirement": ">= 2.1.0 < 5.0.0"
     }
   ],
   "operatingsystem_support": [
@@ -73,7 +73,7 @@
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">= 6.22.1 < 8.0.0"
+      "version_requirement": ">= 7.0.0 < 9.0.0"
     }
   ]
 }
