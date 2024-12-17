@@ -4,15 +4,15 @@ describe 'libvirt::kvm' do
   context 'supported operating systems' do
     on_supported_os.each do |os, os_facts|
       context "on #{os}" do
-        let(:facts) {
+        let(:facts) do
           facts = os_facts.dup
           facts[:libvirt_br_netfilter_loaded] = false
           facts
-        }
+        end
 
         it { is_expected.to compile.with_all_deps }
         it { is_expected.to create_class('libvirt::kvm') }
-        if (['RedHat', 'CentOS'].include?(os_facts[:operatingsystem]))
+        if ['RedHat', 'CentOS'].include?(os_facts[:operatingsystem])
           it { is_expected.to contain_sysctl('net.bridge.bridge-nf-call-arptables') }
           it { is_expected.to contain_sysctl('net.bridge.bridge-nf-call-iptables') }
           it { is_expected.to contain_sysctl('net.ipv4.conf.all.forwarding') }
@@ -30,32 +30,34 @@ describe 'libvirt::kvm' do
         end
 
         context 'with br_netfilter loaded' do
-          let(:facts) {
+          let(:facts) do
             facts = os_facts.dup
             facts[:libvirt_br_netfilter_loaded] = true
             facts
-          }
+          end
 
           it { is_expected.to compile.with_all_deps }
 
-          it { is_expected.to_not contain_kmod__load('br_netfilter') }
+          it { is_expected.not_to contain_kmod__load('br_netfilter') }
         end
 
         context 'load the appropriate kvm kernel module' do
           context 'on Intel hardware' do
-            let(:facts) {
+            let(:facts) do
               os_facts.merge(
-                cpuinfo: { 'processor0' => { 'vendor_id' => 'GenuineIntel' } }
+                cpuinfo: { 'processor0' => { 'vendor_id' => 'GenuineIntel' } },
               )
-            }
+            end
+
             it { is_expected.to contain_kmod__load('kvm_intel') }
           end
           context 'on AMD hardware' do
-            let(:facts) {
+            let(:facts) do
               os_facts.merge(
-                cpuinfo: { 'processor0' => { 'vendor_id' => 'AuthenticAMD' } }
+                cpuinfo: { 'processor0' => { 'vendor_id' => 'AuthenticAMD' } },
               )
-            }
+            end
+
             it { is_expected.to contain_kmod__load('kvm_amd') }
           end
         end
