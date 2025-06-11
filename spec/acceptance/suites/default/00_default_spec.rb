@@ -18,18 +18,18 @@ describe 'libvirt' do
       end
 
       let(:hieradata) do
-        _hieradata = {
+        new_hieradata = {
           'libvirt::kvm' => true,
           'libvirt::ksm' => true
         }
 
         unless virt_support(host)
           # Nested virtualization issues
-          _hieradata['libvirt::manage_sysctl'] = false
-          _hieradata['libvirt::load_kernel_modules'] = false
+          new_hieradata['libvirt::manage_sysctl'] = false
+          new_hieradata['libvirt::load_kernel_modules'] = false
         end
 
-        _hieradata
+        new_hieradata
       end
 
       it 'applies successfully' do
