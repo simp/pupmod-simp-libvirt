@@ -1,3 +1,6 @@
+* Thu Sep 11 2025 Steven Pritchard <steve@sicura.us> - 5.9.2
+- Clean up for rubocop and puppet-lint
+
 * Wed Jan 17 2024 Richard Gardner <rick@sicura.us> - 5.9.1
 - Updated hiera.yaml facts to support puppet 8
 

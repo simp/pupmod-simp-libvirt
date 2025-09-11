@@ -78,8 +78,7 @@ class libvirt::ksm (
   Integer                         $ksm_thres_coef       = 10,
   Optional[Integer]               $ksm_thres_const      = undef
 ) {
-
-  ensure_packages( $package_list, { 'ensure' => $package_ensure, } )
+  ensure_packages($package_list, { 'ensure' => $package_ensure })
 
   $package_list.each |String $pkg|  { Package[$pkg] ~> [ Service['ksmtuned'], Service['ksm'] ] }
 
@@ -88,14 +87,14 @@ class libvirt::ksm (
     group   => 'root',
     mode    => '0644',
     content => template('libvirt/ksmtuned.erb'),
-    notify  => Service['ksmtuned']
+    notify  => Service['ksmtuned'],
   }
 
   $_ensure = $enable ? { true => 'running', false => undef }
 
   service { 'ksmtuned':
     ensure => $_ensure,
-    enable => $enable
+    enable => $enable,
   }
 
   file { '/etc/sysconfig/ksm':
@@ -103,10 +102,10 @@ class libvirt::ksm (
     group   => 'root',
     mode    => '0644',
     content => template('libvirt/ksm.erb'),
-    notify  => Service['ksm']
+    notify  => Service['ksm'],
   }
 
   service { 'ksm':
-    enable  => $enable
+    enable => $enable,
   }
 }
