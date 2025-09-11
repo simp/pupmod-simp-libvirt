@@ -12,11 +12,11 @@ describe 'libvirt::polkit' do
         it { is_expected.to compile.with_all_deps }
         it { is_expected.to create_class('libvirt::polkit') }
         it {
-          is_expected.to create_polkit__authorization__basic_policy('Allow users in virtusers to use libvirt').with({
-                                                                                                                      ensure:    'present',
-          priority:  10,
-          action_id: 'org.libvirt.unix.manage'
-                                                                                                                    })
+          is_expected.to create_polkit__authorization__basic_policy('Allow users in virtusers to use libvirt').with(
+            ensure: 'present',
+            priority: 10,
+            action_id: 'org.libvirt.unix.manage',
+          )
         }
       end
     end

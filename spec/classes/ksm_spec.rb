@@ -6,16 +6,16 @@ describe 'libvirt::ksm' do
       context "on #{os}" do
         let(:facts) do
           os_facts.merge(
-          simplib_sysctl: {
-            'kernel.shmall' => '18446744073692774399'
-          },
-        )
+            simplib_sysctl: {
+              'kernel.shmall' => '18446744073692774399',
+            },
+          )
         end
 
         let(:params) do
           {
             ksm_max_kernel_pages: 40,
-         ksm_monitor_interval: 60
+            ksm_monitor_interval: 60,
           }
         end
         let(:precondition) { "include 'libvirt'" }

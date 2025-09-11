@@ -12,7 +12,7 @@ describe 'libvirt' do
   hosts.each do |host|
     context 'should set up libvirt' do
       let(:manifest) do
-        <<-EOF
+        <<~EOF
           include 'libvirt'
         EOF
       end
@@ -20,7 +20,7 @@ describe 'libvirt' do
       let(:hieradata) do
         new_hieradata = {
           'libvirt::kvm' => true,
-          'libvirt::ksm' => true
+          'libvirt::ksm' => true,
         }
 
         unless virt_support(host)
@@ -68,13 +68,13 @@ describe 'libvirt' do
         end
 
         it 'is able to spin up a VM' do
-          vm_manifest = <<-EOF
+          vm_manifest = <<~EOF
             include libvirt
 
             libvirt::vm { 'test':
               mac_addr  => '00:16:3e:aa:bb:cc',
               'size'    => 5,
-              disk_opts => { 'bus' => 'virtiio' }
+              disk_opts => { 'bus' => 'virtio' },
             }
           EOF
 

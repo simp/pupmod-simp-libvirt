@@ -13,31 +13,31 @@ describe 'libvirt::vm' do
         default: {
           size: 50,
           pxe: true,
-          target_dir: '/tmp/test_libvirt'
+          target_dir: '/tmp/test_libvirt',
         },
         larger_disk_size: {
           size: 100,
           pxe: true,
-          target_dir: '/tmp/test_libvirt'
+          target_dir: '/tmp/test_libvirt',
         },
         specify_disk_opts: {
           size: 100,
           disk_opts: { 'bus' => '1', 'format' => 'qcow', 'io' => 'test' },
-            pxe: true,
-            target_dir: '/tmp/test_libvirt'
+          pxe: true,
+          target_dir: '/tmp/test_libvirt',
         },
         increased_vcpus: {
           vcpus: 4,
           size: 50,
           pxe: true,
-          target_dir: '/tmp/test_libvirt'
+          target_dir: '/tmp/test_libvirt',
         },
         larger_memory_size: {
           mem: 1024,
           size: 50,
           pxe: true,
-          target_dir: '/tmp/test_libvirt'
-        }
+          target_dir: '/tmp/test_libvirt',
+        },
       }.each do |name, testcase|
         context "when test case = #{name}" do
           let(:params) do
