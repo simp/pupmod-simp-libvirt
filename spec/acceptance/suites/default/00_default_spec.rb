@@ -2,7 +2,7 @@ require 'spec_helper_acceptance'
 
 test_name 'libvirt'
 
-def virt_support(host)
+def virt_support?(host)
   kernel_flags = on(host, %(cat /proc/cpuinfo | grep flags | head -1 | cut -f2 -d':')).output.strip.split
 
   kernel_flags.include?('vmx') || kernel_flags.include?('svm')
@@ -23,7 +23,7 @@ describe 'libvirt' do
           'libvirt::ksm' => true,
         }
 
-        unless virt_support(host)
+        unless virt_support?(host)
           # Nested virtualization issues
           new_hieradata['libvirt::manage_sysctl'] = false
           new_hieradata['libvirt::load_kernel_modules'] = false
@@ -61,7 +61,7 @@ describe 'libvirt' do
         expect(result).not_to match(%r{failure})
       end
 
-      if virt_support(host)
+      if virt_support?(host)
         it 'has net.bridge.bridge-nf-call-arptables set to 1' do
           result = on(host, 'sysctl -n net.bridge.bridge-nf-call-arptables').output.strip
           expect(result).to eq '1'
