@@ -43,10 +43,10 @@ describe 'libvirt::vm' do
           let(:params) do
             testcase
           end
+          let(:create_vm) { File.binread("#{File.dirname(__FILE__)}/data/#{name}.txt") }
 
           it { is_expected.to create_file('/tmp/test_libvirt').with_ensure('directory') }
 
-          create_vm = File.open("#{File.dirname(__FILE__)}/data/#{name}.txt", 'rb').read
           it { is_expected.to create_file('/usr/local/sbin/vm-create-foo_vm.sh').with_content(create_vm) }
         end
       end
