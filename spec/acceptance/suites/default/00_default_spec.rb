@@ -43,12 +43,12 @@ describe 'libvirt' do
 
       it 'has libvirt running' do
         result = on(host, 'puppet resource service libvirtd').output
-        expect(result).to match(%r{running})
+        expect(result).to include('running')
       end
 
       it 'has ksmtuned running' do
         result = on(host, 'puppet resource service ksmtuned').output
-        expect(result).to match(%r{running})
+        expect(result).to include('running')
       end
 
       it 'has ksm enabled' do
@@ -58,7 +58,7 @@ describe 'libvirt' do
 
       it 'is able to use virsh' do
         result = on(host, 'virsh version').output
-        expect(result).not_to match(%r{failure})
+        expect(result).not_to include('failure')
       end
 
       if virt_support?(host)
