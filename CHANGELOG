@@ -1,3 +1,16 @@
+* Mon Jun 29 2026 Steven Pritchard <steven.pritchard@gmail.com> - 6.0.0
+- Fix a NoMethodError in templates/ksmtuned.erb when the `simplib_sysctl`
+  fact (or its `kernel.shmall` key) is nil; fall back to 0 for the shmall
+  derived KSM_NPAGES_MIN/MAX values
+
+* Mon Jun 08 2026 Steven Pritchard <steven.pritchard@gmail.com> - 6.0.0
+- Switch `requirements` from `puppet` to `openvox` (>= 8 < 9)
+- Point `issues_url` at GitHub Issues
+- Drop end-of-life OS support (CentOS 8, EL7); list EL10 across all supported distros
+- Allow newer SIMP module dependencies (see metadata.json diff)
+- Sync Gemfile with current puppetsync baseline (adds OpenVox to test gems)
+- Drop Puppet 7 / Ruby 2.7 from GitHub Actions; use Ruby 3.2.11 with OpenVox 8 and 3.4.9 elsewhere
+
 * Thu Sep 11 2025 Steven Pritchard <steve@sicura.us> - 5.9.2
 - Clean up for rubocop and puppet-lint
 
