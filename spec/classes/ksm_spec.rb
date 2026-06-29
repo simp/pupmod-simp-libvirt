@@ -31,6 +31,16 @@ describe 'libvirt::ksm' do
         it { is_expected.to create_file('/etc/sysconfig/ksm').with_content(%r{KSM_MAX_KERNEL_PAGES=40}) }
         it { is_expected.to contain_service('ksm') }
         it { is_expected.to contain_service('ksmtuned').with_ensure('running') }
+
+        context 'when the simplib_sysctl fact is unavailable' do
+          let(:facts) { os_facts.merge(simplib_sysctl: nil) }
+
+          # The ksmtuned.erb template must not raise when the
+          # `simplib_sysctl` fact (or its `kernel.shmall` key) is nil.
+          it { is_expected.to compile.with_all_deps }
+          it { is_expected.to create_file('/etc/ksmtuned.conf').with_content(%r{KSM_NPAGES_MIN=0}) }
+          it { is_expected.to create_file('/etc/ksmtuned.conf').with_content(%r{KSM_NPAGES_MAX=0}) }
+        end
       end
     end
   end

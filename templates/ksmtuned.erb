@@ -1,14 +1,22 @@
 <%
 # Variable Munging
 
+# The `simplib_sysctl` fact (and/or its `kernel.shmall` key) may be nil on
+# systems where it could not be resolved. Guard against that so the template
+# does not raise a NoMethodError; fall back to 0 when shmall is unavailable.
+shmall = nil
+unless @facts['simplib_sysctl'].nil?
+  shmall = @facts['simplib_sysctl']['kernel.shmall']
+end
+
 ksm_npages_min = @ksm_npages_min.dup
 if ksm_npages_min.eql?('shmall')
-  ksm_npages_min = @facts['simplib_sysctl']['kernel.shmall'].to_i/2
+  ksm_npages_min = shmall.to_i/2
 end
 
 ksm_npages_max = @ksm_npages_max.dup
 if ksm_npages_max.eql?('shmall')
-  ksm_npages_max = @facts['simplib_sysctl']['kernel.shmall']
+  ksm_npages_max = shmall.nil? ? 0 : shmall
 end
 
 -%>

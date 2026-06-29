@@ -1,3 +1,8 @@
+* Mon Jun 29 2026 Steven Pritchard <steven.pritchard@gmail.com> - 6.0.0
+- Fix a NoMethodError in templates/ksmtuned.erb when the `simplib_sysctl`
+  fact (or its `kernel.shmall` key) is nil; fall back to 0 for the shmall
+  derived KSM_NPAGES_MIN/MAX values
+
 * Mon Jun 08 2026 Steven Pritchard <steven.pritchard@gmail.com> - 6.0.0
 - Switch `requirements` from `puppet` to `openvox` (>= 8 < 9)
 - Point `issues_url` at GitHub Issues
