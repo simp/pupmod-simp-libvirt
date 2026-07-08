@@ -286,6 +286,8 @@ List of packages to be managed for KVM
 
 * Defaults in module data
 
+Default value: `['libsndfile', 'qemu-img', 'qemu-kvm']`
+
 ##### <a name="-libvirt--kvm--package_ensure"></a>`package_ensure`
 
 Data type: `Any`
