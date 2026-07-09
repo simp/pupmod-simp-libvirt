@@ -6,19 +6,23 @@
 #   * Defaults in module data
 #
 # @param package_ensure
+#   ``ensure`` setting for the KVM packages
+#
 # @param manage_sysctl
+#   Manage the sysctl settings needed for KVM networking
+#
 # @param load_kernel_modules
+#   Manage the kernel modules needed for KVM
 #
 # @author https://github.com/simp/pupmod-simp-libvirt/graphs/contributors
 #
 class libvirt::kvm (
-  $package_list,
-  $package_ensure      = $::libvirt::package_ensure,
-  $manage_sysctl       = $::libvirt::manage_sysctl,
-  $load_kernel_modules = $::libvirt::load_kernel_modules
+  Array[String]  $package_list,
+  String         $package_ensure      = $libvirt::package_ensure,
+  Boolean        $manage_sysctl       = $libvirt::manage_sysctl,
+  Boolean        $load_kernel_modules = $libvirt::load_kernel_modules
 ) inherits libvirt {
-
-  ensure_packages($package_list, { ensure => $package_ensure } )
+  ensure_packages($package_list, { ensure => $package_ensure })
 
   if $load_kernel_modules {
     $_kvm_kmod = $facts['cpuinfo']['processor0']['vendor_id'] ? {

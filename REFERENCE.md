@@ -280,7 +280,7 @@ The following parameters are available in the `libvirt::kvm` class:
 
 ##### <a name="-libvirt--kvm--package_list"></a>`package_list`
 
-Data type: `Any`
+Data type: `Array[String]`
 
 List of packages to be managed for KVM
 
@@ -290,27 +290,27 @@ Default value: `['libsndfile', 'qemu-img', 'qemu-kvm']`
 
 ##### <a name="-libvirt--kvm--package_ensure"></a>`package_ensure`
 
-Data type: `Any`
+Data type: `String`
 
+``ensure`` setting for the KVM packages
 
-
-Default value: `$::libvirt::package_ensure`
+Default value: `$libvirt::package_ensure`
 
 ##### <a name="-libvirt--kvm--manage_sysctl"></a>`manage_sysctl`
 
-Data type: `Any`
+Data type: `Boolean`
 
+Manage the sysctl settings needed for KVM networking
 
-
-Default value: `$::libvirt::manage_sysctl`
+Default value: `$libvirt::manage_sysctl`
 
 ##### <a name="-libvirt--kvm--load_kernel_modules"></a>`load_kernel_modules`
 
-Data type: `Any`
+Data type: `Boolean`
 
+Manage the kernel modules needed for KVM
 
-
-Default value: `$::libvirt::load_kernel_modules`
+Default value: `$libvirt::load_kernel_modules`
 
 ### <a name="libvirt--polkit"></a>`libvirt::polkit`
 

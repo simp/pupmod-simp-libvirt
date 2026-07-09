@@ -34,7 +34,6 @@ class libvirt (
   Boolean        $manage_sysctl       = true,
   String         $package_ensure      = simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' })
 ) {
-
   simplib::assert_metadata($module_name)
 
   include 'libvirt::install'
