@@ -46,8 +46,7 @@ defined type, which renders a `virt-install` wrapper script
 - **`libvirt::ksm` (`manifests/ksm.pp`)** — configures Kernel Same-page
   Merging (shipped in `qemu-kvm`; see the class-header comment `ksm.pp`).
   Manages `/etc/ksmtuned.conf` from `templates/ksmtuned.erb` and
-  `/etc/sysconfig/ksm` from `templates/ksm.erb`, and toggles the `ksmtuned` and
-  `ksm` services on `$enable` (`ksm.pp`). Also carries the seam at
+  `/etc/sysconfig/ksm` from `templates/ksm.erb`, and drives the `ksmtuned` and `ksm` services from `$enable`: both get `enable => $enable`, but only `ksmtuned` gets `ensure` (`running` when `$enable`, else unmanaged) — the running state of `ksm` itself is left unmanaged (`ksm.pp`). Also carries the seam at
   `ksm.pp`. The `ksm_npages_min`/`ksm_npages_max` defaults are the literal
   `'shmall'` which the template resolves from `/proc/sys/kernel/shmall`.
 
