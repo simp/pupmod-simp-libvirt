@@ -17,15 +17,15 @@ defined type, which renders a `virt-install` wrapper script
 
 ### Business logic
 
-- **`libvirt` (`manifests/init.pp:26-57`)** — Public entry class (consumers
-  `include 'libvirt'`; calls `simplib::assert_metadata` at `init.pp:38`). Always
+- **`libvirt` (`manifests/init.pp`)** — Public entry class (consumers
+  `include 'libvirt'`; calls `simplib::assert_metadata` at `init.pp`). Always
   includes `libvirt::install` and `libvirt::service` and wires
-  `Install ~> Service` (`init.pp:40-43`). Then conditionally:
-  - `$kvm` (default **`true`**, `init.pp:32`) → includes `libvirt::kvm` with
-    ordering `Install -> Kvm ~> Service` (`init.pp:45-50`).
-  - `$ksm` (default **`false`**, `init.pp:31`) → includes `libvirt::ksm`
-    (`Ksm ~> Service`, `init.pp:52-56`).
-  - `$package_ensure` is the seam (`init.pp:35`).
+  `Install ~> Service` (`init.pp`). Then conditionally:
+  - `$kvm` (default **`true`**, `init.pp`) → includes `libvirt::kvm` with
+    ordering `Install -> Kvm ~> Service` (`init.pp`).
+  - `$ksm` (default **`false`**, `init.pp`) → includes `libvirt::ksm`
+    (`Ksm ~> Service`, `init.pp`).
+  - `$package_ensure` is the seam (`init.pp`).
 
 - **`libvirt::install` / `libvirt::service`** — internal helper classes included
   by `libvirt` (installs `$package_list` + the `libvirt` package; manages the
@@ -34,37 +34,37 @@ defined type, which renders a `virt-install` wrapper script
   entry point is the main `libvirt` class — drive configuration through its
   parameters rather than including the helpers directly.
 
-- **`libvirt::kvm` (`manifests/kvm.pp:14-77`)** — `inherits libvirt`. Ensures
+- **`libvirt::kvm` (`manifests/kvm.pp`)** — `inherits libvirt`. Ensures
   the KVM packages, and when `$load_kernel_modules` selects the CPU-specific
   module from the `cpuinfo` fact: `AuthenticAMD → kvm_amd`,
   `GenuineIntel → kvm_intel`, **anything else `fail()`s**
-  (`kvm.pp:24-28`). When `$manage_sysctl`, enables IPv4 forwarding and sets the
+  (`kvm.pp`). When `$manage_sysctl`, enables IPv4 forwarding and sets the
   `net.bridge.bridge-nf-call-{arptables,iptables}` knobs to `'0'` so bridged VM
   traffic bypasses the host firewall; the ip6tables knob is `'0'` when
-  `ipv6_enabled`, else `absent` (`kvm.pp:35-76`).
+  `ipv6_enabled`, else `absent` (`kvm.pp`).
 
-- **`libvirt::ksm` (`manifests/ksm.pp:67-111`)** — configures Kernel Same-page
-  Merging (shipped in `qemu-kvm`; see the class-header comment `ksm.pp:1-4`).
+- **`libvirt::ksm` (`manifests/ksm.pp`)** — configures Kernel Same-page
+  Merging (shipped in `qemu-kvm`; see the class-header comment `ksm.pp`).
   Manages `/etc/ksmtuned.conf` from `templates/ksmtuned.erb` and
   `/etc/sysconfig/ksm` from `templates/ksm.erb`, and toggles the `ksmtuned` and
-  `ksm` services on `$enable` (`ksm.pp:85-110`). Also carries the seam at
-  `ksm.pp:69`. The `ksm_npages_min`/`ksm_npages_max` defaults are the literal
+  `ksm` services on `$enable` (`ksm.pp`). Also carries the seam at
+  `ksm.pp`. The `ksm_npages_min`/`ksm_npages_max` defaults are the literal
   `'shmall'` which the template resolves from `/proc/sys/kernel/shmall`.
 
-- **`libvirt::polkit` (`manifests/polkit.pp:23-41`)** — Public, optional. Emits
+- **`libvirt::polkit` (`manifests/polkit.pp`)** — Public, optional. Emits
   a single `polkit::authorization::basic_policy` for action
-  **`org.libvirt.unix.manage`** (`polkit.pp:39`), allowing members of `$group`
+  **`org.libvirt.unix.manage`** (`polkit.pp`), allowing members of `$group`
   (default `'virtusers'`) to manage libvirt. It is **not** included by the main
   class — declare it yourself when you want the rule.
 
-- **`libvirt::vm` (`manifests/vm.pp:138-203`)** — Public defined type; the API
+- **`libvirt::vm` (`manifests/vm.pp`)** — Public defined type; the API
   for creating a VM. It `include`s `libvirt::kvm`, ensures `$target_dir`
   (default `/var/VM`, mode `2660`, group `kvm`) exists, renders
   `/usr/local/sbin/vm-create-${name}.sh` from `templates/newvm.erb`
-  (`vm.pp:190-196`), and runs it (`vm.pp:198-202`). The `exec` is idempotent
+  (`vm.pp`), and runs it (`vm.pp`). The `exec` is idempotent
   via `onlyif => "virsh domstate ${name}; test $? -ne 0"` — the script only runs
   when the domain does not yet exist, and it runs backgrounded with output to
-  `/dev/null`. Parameters mirror `virt-install(1)` field syntax (`vm.pp:1-4`);
+  `/dev/null`. Parameters mirror `virt-install(1)` field syntax (`vm.pp`);
   key ones: `$size` (required, disk GB), `$networks` (array of
   `{type,target,mac,model}` hashes; overrides the legacy `$bridge`/`virbr0`),
   `$pxe` vs `$location_url` (boot source; a `.iso` suffix switches the flag),
@@ -73,23 +73,23 @@ defined type, which renders a `virt-install` wrapper script
 ### Gotchas / non-obvious details
 
 - **KVM is on by default; KSM is off.** Just `include 'libvirt'` gives you KVM
-  (`init.pp:31-32`).
+  (`init.pp`).
 - **Unknown CPU vendor fails the catalog.** `libvirt::kvm` only knows AMD and
-  Intel (`kvm.pp:24-28`); exotic/nested-virt CPUs need `$load_kernel_modules =>
+  Intel (`kvm.pp`); exotic/nested-virt CPUs need `$load_kernel_modules =>
   false` plus manual module handling.
 - **br_netfilter loading is fact-gated.** The custom fact
   `libvirt_br_netfilter_loaded` (`lib/facter/libvirt_br_netfilter_loaded.rb`)
   runs `sysctl -n net.bridge.bridge-nf-call-iptables` and returns whether that
-  succeeded. `kvm.pp:44` loads `br_netfilter` (and orders it before the bridge
+  succeeded. `kvm.pp` loads `br_netfilter` (and orders it before the bridge
   sysctls) **only** when the fact is false — i.e. when the module isn't already
-  loaded — to avoid a redundant `kmod::load` (`kvm.pp:44-55`).
+  loaded — to avoid a redundant `kmod::load` (`kvm.pp`).
 - **Bridged VM traffic bypasses the host firewall by design.** The
-  `bridge-nf-call-*` sysctls are set to `'0'` (`kvm.pp:57-75`); this is
+  `bridge-nf-call-*` sysctls are set to `'0'` (`kvm.pp`); this is
   intentional, not a mistake.
 - **`libvirt::vm` shells out.** It generates and runs a `virt-install` wrapper
   rather than declaring libvirt resources; failures are swallowed
   (`> /dev/null 2>&1`), so debug by running the generated
-  `/usr/local/sbin/vm-create-<name>.sh` by hand (`vm.pp:198-202`).
+  `/usr/local/sbin/vm-create-<name>.sh` by hand (`vm.pp`).
 - **`simp/simp_options` is NOT a declared dependency** in `metadata.json`, yet
   the manifests consume the `simp_options::package_ensure` seam via
   `simplib::lookup` (provided by `simp/simplib`).
@@ -98,10 +98,10 @@ defined type, which renders a `virt-install` wrapper script
 
 The module's only lookup seam (the natural target for a lookup-path unit test):
 
-| Line | Key | `default_value` |
+| File | Key | `default_value` |
 |------|-----|-----------------|
-| `init.pp:35` | `simp_options::package_ensure` | `'installed'` |
-| `ksm.pp:69` | `simp_options::package_ensure` | `'installed'` |
+| `init.pp` | `simp_options::package_ensure` | `'installed'` |
+| `ksm.pp` | `simp_options::package_ensure` | `'installed'` |
 
 Keep routing package state through `simplib::lookup('simp_options::package_ensure',
 { 'default_value' => ... })` with an explicit default rather than assuming
