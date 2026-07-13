@@ -28,7 +28,6 @@ class libvirt::polkit (
   Boolean                       $local    = true,
   Boolean                       $active   = true
 ) {
-
   polkit::authorization::basic_policy { "Allow users in ${group} to use libvirt":
     ensure    => $ensure,
     group     => $group,

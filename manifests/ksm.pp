@@ -80,7 +80,7 @@ class libvirt::ksm (
 ) {
   ensure_packages($package_list, { 'ensure' => $package_ensure })
 
-  $package_list.each |String $pkg|  { Package[$pkg] ~> [ Service['ksmtuned'], Service['ksm'] ] }
+  $package_list.each |String $pkg| { Package[$pkg] ~> [Service['ksmtuned'], Service['ksm']] }
 
   file { '/etc/ksmtuned.conf':
     owner   => 'root',

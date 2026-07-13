@@ -14,6 +14,6 @@ class libvirt::install (
 ) {
   simplib::assert_metadata($module_name)
 
-  ensure_packages( $package_list, { ensure => $package_ensure } )
+  ensure_packages( $package_list, { ensure => $package_ensure })
   package { 'libvirt': ensure => $package_ensure }
 }
