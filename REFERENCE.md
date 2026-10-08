@@ -8,7 +8,7 @@
 
 * [`libvirt`](#libvirt): Install the necessary packages and make sure ``libvirtd`` is running
 * [`libvirt::install`](#libvirt--install): Install the necessary packages
-* [`libvirt::ksm`](#libvirt--ksm): A class to configure Kernel Shared Memory components.  This isn't strictly tied to ``libvirt``, but it's included in the qemu-kvm package so 
+* [`libvirt::ksm`](#libvirt--ksm): A class to configure Kernel Shared Memory components.  This isn't strictly tied to ``libvirt``, but it's included in the qemu-kvm package so
 * [`libvirt::kvm`](#libvirt--kvm): Set up libvirt to use KVM
 * [`libvirt::polkit`](#libvirt--polkit): Add a rule file allowing members of a group to use libvirt
 * [`libvirt::service`](#libvirt--service): Make sure ``libvirtd`` is running
@@ -410,7 +410,7 @@ If you do set up your own bridge, make sure your call of this define
 
 #### Examples
 
-##### 
+#####
 
 ```puppet
 libvirt::vm { 'test_system':
@@ -773,4 +773,3 @@ A hash of options to pass to the watchdog option of virt-install.
 Options are 'model', and 'action'(optional)
 
 Default value: `{ 'model' => 'default' }`
-
