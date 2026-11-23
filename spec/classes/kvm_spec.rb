@@ -12,6 +12,13 @@ describe 'libvirt::kvm' do
 
         it { is_expected.to compile.with_all_deps }
         it { is_expected.to create_class('libvirt::kvm') }
+
+        if os_facts[:os][:release][:major].to_i >= 10
+          it { is_expected.not_to contain_package('ipxe-roms') }
+        elsif os_facts[:os][:name] != 'OracleLinux'
+          it { is_expected.to contain_package('ipxe-roms') }
+        end
+
         if ['RedHat', 'CentOS'].include?(os_facts[:operatingsystem])
           it { is_expected.to contain_sysctl('net.bridge.bridge-nf-call-arptables') }
           it { is_expected.to contain_sysctl('net.bridge.bridge-nf-call-iptables') }
