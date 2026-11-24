@@ -32,6 +32,13 @@ describe 'libvirt::ksm' do
         it { is_expected.to contain_service('ksm') }
         it { is_expected.to contain_service('ksmtuned').with_ensure('running') }
 
+        if os_facts[:os][:release][:major].to_i >= 9
+          it { is_expected.to contain_package('ksmtuned') }
+          it { is_expected.not_to contain_package('qemu-kvm-common') }
+        else
+          it { is_expected.to contain_package('qemu-kvm-common') }
+        end
+
         context 'when the simplib_sysctl fact is unavailable' do
           let(:facts) { os_facts.merge(simplib_sysctl: nil) }
 
